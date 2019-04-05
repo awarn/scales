@@ -1,8 +1,9 @@
 {
-  "name": "pwa-starter-kit",
-  "version": "0.9.0",
+  "name": "Scales",
+  "version": "1.0.0",
   "contributors": [
-    "The Polymer Authors"
+    "The Polymer Authors",
+    "awarnhag"
   ],
   "license": "BSD-3-Clause",
   "repository": "Polymer/pwa-starter-kit",

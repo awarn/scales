@@ -34,7 +34,7 @@ import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import { menuIcon } from './my-icons.js';
 import './snack-bar.js';
 
-class MyApp extends connect(store)(LitElement) {
+class Scales extends connect(store)(LitElement) {
   static get properties() {
     return {
       appTitle: { type: String },
@@ -279,4 +279,4 @@ class MyApp extends connect(store)(LitElement) {
   }
 }
 
-window.customElements.define('my-app', MyApp);
+window.customElements.define('scales-app', Scales);
