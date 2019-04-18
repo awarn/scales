@@ -1,7 +1,8 @@
 
 import {
 	GET_NOTES,
-	ADD_NOTE
+	ADD_NOTE,
+	SET_NOTE_POSITION
 } from '../actions/map.js';
 
 const INITIAL_STATE = {
@@ -18,6 +19,7 @@ const maps = (state = INITIAL_STATE, action) => {
 				notes: action.notes
 			};
 		case ADD_NOTE:
+		case SET_NOTE_POSITION:
 			return {
 				...state,
 				notes: notes(state.notes, action),
@@ -30,12 +32,20 @@ const maps = (state = INITIAL_STATE, action) => {
 
 const notes = (state, action) => {
 	switch (action.type) {
-		case ADD_NOTE:
+		case ADD_NOTE: {
 			const noteId = action.noteId;
 			return {
 				...state,
 				[noteId]: note(state[noteId], action)
 			};
+		}
+		case SET_NOTE_POSITION: {
+			const noteId = action.note.id;
+			return {
+				...state,
+				[noteId]: note(state[noteId], action)
+			};
+		}
 		default:
 			return state;
 	}
@@ -45,6 +55,13 @@ const note = (state, action) => {
 	switch (action.type) {
 		case ADD_NOTE:
 			return state
+		case SET_NOTE_POSITION:
+			return {
+				...state,
+				x: action.x,
+				y: action.y,
+				z: action.z
+			}
 		default:
 			return state;
 	}

@@ -1,24 +1,40 @@
 import { LitElement, html, css } from "lit-element";
 
-class MapNote extends LitElement {
+import { connect } from 'pwa-helpers/connect-mixin.js';
+import { store } from '../store.js';
+
+import { setNotePosition } from "../actions/map";
+
+import maps from "../reducers/map";
+store.addReducers({
+  maps
+});
+
+import { SharedStyles } from "./shared-styles.js";
+
+class MapNote extends connect(store)(LitElement) {
 	static get properties() {
     return {
-      notes: { type: Array },
-			x: { type: Number },
-			y: { type: Number },
-			id: { type: String },
-			title: { type: String },
-			text: { type: String }
+      note: Object,
+			x: Number,
+			y: Number
     }
 	}
 	
 	static get styles() {
     return [
+			SharedStyles,
       css`
-        .map-note {
-					display: block;
-					position: absolute;
-        }
+        :host {
+					display: flex;
+					position: fixed;
+					padding: .25rem .5rem;
+					background: #fff;
+					box-shadow: 0 0 .0625rem rgba(0,0,0,1);
+				}
+				p {
+					margin: 0;
+				}
       `
     ];
   }
@@ -27,17 +43,32 @@ class MapNote extends LitElement {
 		super();
 	}
 
+	handleDragEnd(event) {
+    store.dispatch(setNotePosition(this.note, event.clientX, event.clientY, 0));
+	}
+
+	handleDragStart(event) {
+		event.dataTransfer.setData("text/plain", this.note.id);
+	}
+
+	handleClick(event) {
+		
+	}
+
 	render() {
 		return html`
 			<style>
-        :host .map-note {
-					top: ${this.y}%;
-					left: ${this.x}%;
+        :host {
+					top: ${this.note.y}px;
+					left: ${this.note.x}px;
         }
       </style>
-			<div class="map-note">
-				<h2>${this.title}</h2>
-				<div>${this.text}</div>
+			<div
+				draggable="true"
+				@dragend="${this.handleDragEnd}"
+				@dragstart="${this.handleDragStart}"
+				@click="${this.handleClick}">
+				<p>${this.note.title}</p>
 			</div>
 		`;
 	}

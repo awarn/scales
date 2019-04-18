@@ -24,10 +24,10 @@ class MindMap extends connect(store)(LitElement) {
 	static get styles() {
     return [
       css`
-        .mind-map {
+        :host {
 					display: flex;
 					position: relative;
-					height: 100rem;
+					height: 100vh;
 					width: 100%;
         }
       `
@@ -40,15 +40,12 @@ class MindMap extends connect(store)(LitElement) {
 
 	render() {
 		return html`
-			<div class="mind-map">
+			<div>
 				${Object.keys(this._notes).map((key) => {
 					const item = this._notes[key];
 					return html`
 						<map-note
-							title="${item.title}"
-							text="${item.text}"
-							x="${item.x}"
-							y="${item.y}"></map-note>
+							.note="${item}"></map-note>
 					`;
 				})}
 			</div>
