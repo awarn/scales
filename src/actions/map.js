@@ -25,18 +25,18 @@ export const setNotePosition = (note, x, y, z) => {
 }
 
 export const getNotes = (ids) => (dispatch) => {
-  const notes = NOTE_LIST
-    .reduce((obj, note) => {
-      obj[note.id] = note
-      return obj
-    }, {})/* 
+  let notes = NOTE_LIST
     .filter((note) => {
       if (!ids) {
         return true;
       }
 
       return ids.find(id => id === note.id);
-    }); */
+    })
+    .reduce((obj, note) => {
+      obj[note.id] = note
+      return obj
+    }, {})
 
   dispatch({
     type: GET_NOTES,
