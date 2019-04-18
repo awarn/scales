@@ -6,12 +6,12 @@ export const ADD_NOTE = "ADD_NOTE";
 export const SET_NOTE_POSITION = "SET_NOTE_POSITION";
 
 let NOTE_LIST = [
-  {"id": 1, "title": "Occam", "x": 10.99, "y": 2, "notes": [2,3,4,5], "text": "bla"},
-  {"id": 2, "title": "The High Forest", "x": 29.99, "y": 10},
-  {"id": 3, "title": "Old Towers", "x": 8.99, "y": 5},
-  {"id": 4, "title": "Mistvalley", "x": 24.99, "y": 7},
-  {"id": 5, "title": "Red Larch", "x": 11.99, "y": 3},
-  {"id": 5, "title": "Ashgard", "x": 11.99, "y": 3}
+  {"id": 1, "title": "Occam", "x": 10.99, "y": 200, "notes": [2,3,4,5], "text": "bla"},
+  {"id": 2, "title": "The High Forest", "x": 29.99, "y": 240},
+  {"id": 3, "title": "Old Towers", "x": 8.99, "y": 280},
+  {"id": 4, "title": "Mistvalley", "x": 24.99, "y": 320},
+  {"id": 5, "title": "Red Larch", "x": 11.99, "y": 360},
+  {"id": 5, "title": "Ashgard", "x": 11.99, "y": 400}
 ];
 
 export const setNotePosition = (note, x, y, z) => {
