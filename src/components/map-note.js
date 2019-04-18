@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html, css } from "lit-element";
 
 class MapNote extends LitElement {
 	static get properties() {
@@ -10,6 +10,17 @@ class MapNote extends LitElement {
 			title: { type: String },
 			text: { type: String }
     }
+	}
+	
+	static get styles() {
+    return [
+      css`
+        .map-note {
+					display: block;
+					position: absolute;
+        }
+      `
+    ];
   }
 
 	constructor() {
@@ -18,7 +29,13 @@ class MapNote extends LitElement {
 
 	render() {
 		return html`
-			<div>
+			<style>
+        :host .map-note {
+					top: ${this.y}%;
+					left: ${this.x}%;
+        }
+      </style>
+			<div class="map-note">
 				<h2>${this.title}</h2>
 				<div>${this.text}</div>
 			</div>
