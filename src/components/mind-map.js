@@ -5,7 +5,7 @@ import { store } from '../store.js';
 
 import { getNotes } from "../actions/map.js";
 
-import maps, { notesSelector, noteListSelector } from "../reducers/map.js";
+import maps, { noteListSelector } from "../reducers/map.js";
 store.addReducers({
   maps
 });
