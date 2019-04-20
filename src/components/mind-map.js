@@ -15,10 +15,9 @@ import "./map-note.js";
 class MindMap extends connect(store)(LitElement) {
 	static get properties() {
     return {
-			_notes: { type: Array },
 			_noteList: Array,
-			_id: { type: String },
-			title: { type: String }
+			_id: String,
+			title: String
     }
 	}
 
@@ -52,11 +51,10 @@ class MindMap extends connect(store)(LitElement) {
 	render() {
 		return html`
 			<div class="mind-map__area">
-				${Object.keys(this._notes).map((key) => {
-					const item = this._notes[key];
+				${this._noteList.map((note) => {
 					return html`
 						<map-note
-							.note="${item}"></map-note>
+							.note="${note}"></map-note>
 					`;
 				})}
 			</div>
@@ -71,7 +69,6 @@ class MindMap extends connect(store)(LitElement) {
   }
 
 	stateChanged(state) {
-		this._notes = notesSelector(state);
 		this._noteList = noteListSelector(state);
 	}
 
