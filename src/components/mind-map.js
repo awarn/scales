@@ -15,7 +15,8 @@ import "./map-note.js";
 class MindMap extends connect(store)(LitElement) {
 	static get properties() {
     return {
-      _notes: { type: Array },
+			_notes: { type: Array },
+			_noteList: Array,
 			_id: { type: String },
 			title: { type: String }
     }
@@ -71,10 +72,11 @@ class MindMap extends connect(store)(LitElement) {
 
 	stateChanged(state) {
 		this._notes = notesSelector(state);
+		this._noteList = noteListSelector(state);
 	}
-	
+
 	save() {
-		localStorage.setItem("NOTE_LIST", JSON.stringify(noteListSelector(store.getState())));
+		localStorage.setItem("NOTE_LIST", JSON.stringify(this._noteList));
 	}
 }
 
