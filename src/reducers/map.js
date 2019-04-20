@@ -1,9 +1,9 @@
-
 import {
 	GET_NOTES,
 	ADD_NOTE,
 	SET_NOTE_POSITION
 } from '../actions/map.js';
+import { createSelector } from 'reselect';
 
 const INITIAL_STATE = {
 	maps: {},
@@ -30,7 +30,7 @@ const maps = (state = INITIAL_STATE, action) => {
 	}
 };
 
-const notes = (state, action) => {
+const notes = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case ADD_NOTE: {
 			const noteId = action.noteId;
@@ -67,7 +67,18 @@ const note = (state, action) => {
 	}
 }
 
-export default maps
+export default maps;
 
 export const mapsSelector = state => state.maps.maps;
+
 export const notesSelector = state => state.maps.notes;
+
+export const noteListSelector = createSelector(
+  notesSelector,
+  (notes) => {
+    return Object.keys(notes).map(id => {
+			const item = notes[id];
+			return {"id": item.id, "title": item.title, "x": item.x, "y": item.y, "notes": item.notes, "text": item.text}
+    });
+  }
+);

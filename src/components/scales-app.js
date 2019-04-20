@@ -33,6 +33,7 @@ import '@polymer/app-layout/app-scroll-effects/effects/waterfall.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import { menuIcon } from './my-icons.js';
 import './snack-bar.js';
+import { notesSelector } from '../reducers/map.js';
 
 class Scales extends connect(store)(LitElement) {
   static get properties() {

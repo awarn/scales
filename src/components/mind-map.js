@@ -5,7 +5,7 @@ import { store } from '../store.js';
 
 import { getNotes } from "../actions/map.js";
 
-import maps, { notesSelector } from "../reducers/map.js";
+import maps, { notesSelector, noteListSelector } from "../reducers/map.js";
 store.addReducers({
   maps
 });
@@ -26,10 +26,20 @@ class MindMap extends connect(store)(LitElement) {
       css`
         :host {
 					display: flex;
+					flex-flow: column;
+				}
+				.mind-map__actions {
+					position: fixed;
+					right: 0;
+					bottom: 0;
+					height: 3rem;
+					padding: 0 1rem 1rem 0;
+				}
+				.mind-map__area {
 					position: relative;
-					height: 100vh;
+					height: calc(100vh - 4rem);
 					width: 100%;
-        }
+				}
       `
     ];
   }
@@ -40,7 +50,7 @@ class MindMap extends connect(store)(LitElement) {
 
 	render() {
 		return html`
-			<div>
+			<div class="mind-map__area">
 				${Object.keys(this._notes).map((key) => {
 					const item = this._notes[key];
 					return html`
@@ -48,6 +58,9 @@ class MindMap extends connect(store)(LitElement) {
 							.note="${item}"></map-note>
 					`;
 				})}
+			</div>
+			<div class="mind-map__actions">
+				<button @click="${this.save}">Save</button>
 			</div>
 		`;
 	}
@@ -58,6 +71,10 @@ class MindMap extends connect(store)(LitElement) {
 
 	stateChanged(state) {
 		this._notes = notesSelector(state);
+	}
+	
+	save() {
+		localStorage.setItem("NOTE_LIST", JSON.stringify(noteListSelector(store.getState())));
 	}
 }
 

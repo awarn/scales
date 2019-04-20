@@ -5,7 +5,7 @@ export const GET_NOTES = "GET_NOTES";
 export const ADD_NOTE = "ADD_NOTE";
 export const SET_NOTE_POSITION = "SET_NOTE_POSITION";
 
-let NOTE_LIST = [
+const NOTE_LIST = [
   {"id": 1, "title": "Occam", "x": 10.99, "y": 200, "notes": [2,3,4,5], "text": "bla"},
   {"id": 2, "title": "The High Forest", "x": 29.99, "y": 240},
   {"id": 3, "title": "Old Towers", "x": 8.99, "y": 280},
@@ -25,7 +25,13 @@ export const setNotePosition = (note, x, y, z) => {
 }
 
 export const getNotes = (ids) => (dispatch) => {
-  let notes = NOTE_LIST
+  let noteList = JSON.parse(localStorage.getItem("NOTE_LIST"));
+
+  if (!noteList || noteList.length === 0) {
+    noteList = NOTE_LIST;
+  }
+
+  let notes = noteList
     .filter((note) => {
       if (!ids) {
         return true;
