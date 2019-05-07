@@ -49,8 +49,8 @@ class MapNote extends connect(store)(LitElement) {
 	}
 
 	handleDragEnd(event) {
-		let xPos = (event.clientX - this.xShift) / this.scale;
-		let yPos = (event.clientY - this.yShift) / this.scale;
+		let xPos = (event.clientX - this.xShift - this.clientWidth / 2) / this.scale;
+		let yPos = (event.clientY - this.yShift - this.clientHeight / 2) / this.scale;
 		store.dispatch(setNotePosition(this.note, xPos, yPos, 0));
 	}
 
