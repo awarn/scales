@@ -9,45 +9,47 @@ import { getNotes } from "../actions/map.js";
 
 import maps, { noteListSelector } from "../reducers/map.js";
 store.addReducers({
-  maps
+	maps
 });
 
 import "./map-note.js";
 
 class MindMap extends connect(store)(LitElement) {
 	static get properties() {
-    return {
+		return {
 			_noteList: Array,
 			_id: String,
-			title: String
-    }
+			title: String,
+			scale: Number
+		}
 	}
 
 	static get styles() {
-    return [
-      css`
-        :host {
+		return [
+			css`
+				:host {
 					display: flex;
+					position: relative;
 					flex-flow: column;
 				}
 				.mind-map__actions {
 					position: fixed;
-					right: 0;
-					bottom: 0;
+					right: 1rem;
+					bottom: 1rem;
 					height: 3rem;
-					padding: 0 1rem 1rem 0;
 				}
 				.mind-map__area {
 					position: relative;
-					height: calc(100vh - 4rem);
-					width: 100%;
+					height: calc(100vh - 6rem);
+					overflow: scroll;
 				}
-      `
-    ];
-  }
+			`
+		];
+	}
 
 	constructor() {
 		super();
+		this.scale = 1;
 	}
 
 	render() {
@@ -56,11 +58,16 @@ class MindMap extends connect(store)(LitElement) {
 				${this._noteList.map((note) => {
 					return html`
 						<map-note
-							.note="${note}"></map-note>
+							.note="${note}"
+							.scale="${this.scale}"
+							.xShift="${32}"
+							.yShift="${88}"></map-note>
 					`;
 				})}
 			</div>
 			<div class="mind-map__actions">
+				<button @click="${this.increaseScale}">+</button>
+				<button @click="${this.descreaseScale}">-</button>
 				<button @click="${this.export}">Export</button>
 				<button @click="${this.save}">Save</button>
 			</div>
@@ -68,11 +75,19 @@ class MindMap extends connect(store)(LitElement) {
 	}
 
 	firstUpdated() {
-    store.dispatch(getNotes());
-  }
+		store.dispatch(getNotes());
+	}
 
 	stateChanged(state) {
 		this._noteList = noteListSelector(state);
+	}
+
+	increaseScale() {
+		this.scale *= 2;
+	}
+
+	descreaseScale() {
+		this.scale /= 2;
 	}
 
 	save() {
@@ -82,7 +97,7 @@ class MindMap extends connect(store)(LitElement) {
 	export() {
 		let now = (new Date()).toUTCString().toLocaleLowerCase().replace(/\s|,|:/gm, "-");
 		let noteList = JSON.parse(localStorage.getItem("NOTE_LIST"));
-		makeDownload(`scales-${now}`, JSON.stringify(noteList))
+		makeDownload(`scales-${now}`, JSON.stringify(noteList));
 	}
 }
 

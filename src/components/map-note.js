@@ -7,44 +7,51 @@ import { setNotePosition, getNotes } from "../actions/map";
 
 import maps, { notesSelector } from "../reducers/map";
 store.addReducers({
-  maps
+	maps
 });
 
 import { SharedStyles } from "./shared-styles.js";
 
 class MapNote extends connect(store)(LitElement) {
 	static get properties() {
-    return {
-      note: Object,
-			x: Number,
-			y: Number
-    }
+		return {
+			note: Object,
+			scale: Number,
+			xShift: Number,
+			yShift: Number
+		}
 	}
 	
 	static get styles() {
-    return [
+		return [
 			SharedStyles,
-      css`
-        :host {
+			css`
+				:host {
 					display: flex;
-					position: fixed;
+					position: absolute;
+					padding: 1rem;
+				}
+				:host > div {
 					padding: .25rem .5rem;
+					white-space: nowrap;
 					background: #fff;
 					box-shadow: 0 0 .0625rem rgba(0,0,0,1);
 				}
 				p {
 					margin: 0;
 				}
-      `
-    ];
-  }
+			`
+		];
+	}
 
 	constructor() {
 		super();
 	}
 
 	handleDragEnd(event) {
-    store.dispatch(setNotePosition(this.note, event.clientX, event.clientY, 0));
+		let xPos = (event.clientX - this.xShift) / this.scale;
+		let yPos = (event.clientY - this.yShift) / this.scale;
+		store.dispatch(setNotePosition(this.note, xPos, yPos, 0));
 	}
 
 	handleDragStart(event) {
@@ -58,11 +65,11 @@ class MapNote extends connect(store)(LitElement) {
 	render() {
 		return html`
 			<style>
-        :host {
-					top: ${this.note.y}px;
-					left: ${this.note.x}px;
-        }
-      </style>
+				:host {
+					top: ${this.note.y * this.scale}px;
+					left: ${this.note.x * this.scale}px;
+				}
+			</style>
 			<div
 				draggable="true"
 				@dragend="${this.handleDragEnd}"
