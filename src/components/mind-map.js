@@ -1,5 +1,7 @@
 import { LitElement, html, css } from "lit-element";
 
+import { makeDownload } from "../utils/files.js";
+
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../store.js';
 
@@ -59,6 +61,7 @@ class MindMap extends connect(store)(LitElement) {
 				})}
 			</div>
 			<div class="mind-map__actions">
+				<button @click="${this.export}">Export</button>
 				<button @click="${this.save}">Save</button>
 			</div>
 		`;
@@ -74,6 +77,12 @@ class MindMap extends connect(store)(LitElement) {
 
 	save() {
 		localStorage.setItem("NOTE_LIST", JSON.stringify(this._noteList));
+	}
+
+	export() {
+		let now = (new Date()).toUTCString().toLocaleLowerCase().replace(/\s|,|:/gm, "-");
+		let noteList = JSON.parse(localStorage.getItem("NOTE_LIST"));
+		makeDownload(`scales-${now}`, JSON.stringify(noteList))
 	}
 }
 
