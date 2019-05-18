@@ -198,6 +198,16 @@ class Scales extends connect(store)(LitElement) {
 	render() {
 		// Anything that's related to rendering should be done in here.
 		return html`
+			<style>
+				.main-content {
+					${this._drawerOpened ?
+						`
+							position: relative;
+							z-index: -1;
+						` : ""
+					}
+				}
+			</style>
 			<!-- Header -->
 			<app-header condenses reveals effects="waterfall">
 				<app-toolbar class="toolbar-top">
