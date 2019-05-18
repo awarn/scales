@@ -31,9 +31,10 @@ class MindMap extends connect(store)(LitElement) {
 					display: flex;
 					position: relative;
 					flex-flow: column;
+					align-items: flex-end;
 				}
 				.mind-map__actions {
-					position: fixed;
+					position: sticky;
 					right: 1rem;
 					bottom: 1rem;
 					height: 3rem;
@@ -41,6 +42,7 @@ class MindMap extends connect(store)(LitElement) {
 				.mind-map__area {
 					position: relative;
 					height: calc(100vh - 6rem);
+					width: 100%;
 					overflow: scroll;
 				}
 			`
