@@ -46,7 +46,6 @@ class MapNote extends connect(store)(LitElement) {
 
 	constructor() {
 		super();
-		this._positionType = "absolute";
 	}
 
 	updatePosition(clientX, clientY) {
