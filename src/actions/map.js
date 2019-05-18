@@ -6,6 +6,7 @@ export const ADD_NOTE = "ADD_NOTE";
 export const SET_NOTE_POSITION = "SET_NOTE_POSITION";
 export const PUT_NOTE_IN = "PUT_NOTE_IN";
 export const FILTER_NOTES = "FILTER_NOTES";
+export const UPDATE_NOTE_POSITION_TYPE = "UPDATE_NOTE_POSITION_TYPE";
 
 const NOTE_LIST = [
   {"id": "1", "title": "Occam", "x": 10.99, "y": 200, "notes": ["2","3","4","5"], "text": "bla"},
@@ -72,6 +73,13 @@ export const addNote = (note) => {
     type: ADD_NOTE,
     note
   };
+}
+
+export const updateNotePositionType = (positionType) => {
+  return {
+    type: UPDATE_NOTE_POSITION_TYPE,
+    positionType
+  }
 }
 
 /* export const create = () => {

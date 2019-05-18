@@ -5,7 +5,7 @@ import { store } from '../store.js';
 
 import { setNotePosition, putNoteIn, filterNotes } from "../actions/map";
 
-import maps from "../reducers/map";
+import maps, { noteSettingsSelector } from "../reducers/map";
 store.addReducers({
 	maps
 });
@@ -18,7 +18,8 @@ class MapNote extends connect(store)(LitElement) {
 			note: Object,
 			scale: Number,
 			xShift: Number,
-			yShift: Number
+			yShift: Number,
+			_positionType: String
 		}
 	}
 	
@@ -28,8 +29,8 @@ class MapNote extends connect(store)(LitElement) {
 			css`
 				:host {
 					display: flex;
-					position: absolute;
-					padding: 1rem;
+					padding: .25rem;
+					transition: left .3s, top .3s;
 				}
 				:host > div {
 					padding: .25rem .5rem;
@@ -46,6 +47,13 @@ class MapNote extends connect(store)(LitElement) {
 
 	constructor() {
 		super();
+		this._positionType = "absolute";
+	}
+
+	updatePosition(clientX, clientY) {
+		let xPos = (clientX - this.xShift - this.clientWidth / 2) / this.scale;
+		let yPos = (clientY - this.yShift - this.clientHeight / 2) / this.scale;
+		store.dispatch(setNotePosition(this.note, xPos, yPos, 0));
 	}
 
 	handleDrop(event) {
@@ -60,9 +68,9 @@ class MapNote extends connect(store)(LitElement) {
 	}
 
 	handleDragend(event) {
-		let xPos = (event.clientX - this.xShift - this.clientWidth / 2) / this.scale;
-		let yPos = (event.clientY - this.yShift - this.clientHeight / 2) / this.scale;
-		store.dispatch(setNotePosition(this.note, xPos, yPos, 0));
+		if (this._positionType === "absolute") {
+			this.updatePosition(event.clientX, event.clientY);	
+		}
 	}
 
 	handleDragstart(event) {
@@ -73,12 +81,20 @@ class MapNote extends connect(store)(LitElement) {
 		store.dispatch(filterNotes(this.note.notes));
 	}
 
+	stateChanged(state) {
+		this._positionType = noteSettingsSelector(state).positionType;
+	}
+
 	render() {
 		return html`
 			<style>
 				:host {
-					top: ${this.note.y * this.scale}px;
-					left: ${this.note.x * this.scale}px;
+					position: ${this._positionType};
+					${this._positionType === "absolute" ? `
+						top: ${this.note.y * this.scale}px;
+						left: ${this.note.x * this.scale}px;`
+						: ""
+					}
 				}
 			</style>
 			<div

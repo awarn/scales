@@ -5,9 +5,9 @@ import { makeDownload } from "../utils/files.js";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../store.js';
 
-import { getNotes } from "../actions/map.js";
+import { getNotes, updateNotePositionType } from "../actions/map.js";
 
-import maps, { noteListSelector } from "../reducers/map.js";
+import maps, { noteListSelector, noteSettingsSelector } from "../reducers/map.js";
 store.addReducers({
 	maps
 });
@@ -19,6 +19,7 @@ class MindMap extends connect(store)(LitElement) {
 		return {
 			_noteList: Array,
 			_id: String,
+			_positionType: String,
 			title: String,
 			scale: Number
 		}
@@ -72,6 +73,7 @@ class MindMap extends connect(store)(LitElement) {
 				<button @click="${this.descreaseScale}">-</button>
 				<button @click="${this.export}">Export</button>
 				<button @click="${this.save}">Save</button>
+				<button @click="${this.switchPositionType}">List/Map</button>
 			</div>
 		`;
 	}
@@ -82,6 +84,7 @@ class MindMap extends connect(store)(LitElement) {
 
 	stateChanged(state) {
 		this._noteList = noteListSelector(state);
+		this._positionType = noteSettingsSelector(state).positionType;
 	}
 
 	increaseScale() {
@@ -90,6 +93,15 @@ class MindMap extends connect(store)(LitElement) {
 
 	descreaseScale() {
 		this.scale /= 2;
+	}
+
+	switchPositionType() {
+		if (this._positionType === "relative") {
+			store.dispatch(updateNotePositionType("absolute"));
+		}
+		else {
+			store.dispatch(updateNotePositionType("relative"));
+		}
 	}
 
 	save() {
