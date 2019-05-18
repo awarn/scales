@@ -30,7 +30,6 @@ class MapNote extends connect(store)(LitElement) {
 				:host {
 					display: flex;
 					padding: .25rem;
-					transition: left .3s, top .3s;
 				}
 				:host > div {
 					padding: .25rem .5rem;
@@ -90,10 +89,11 @@ class MapNote extends connect(store)(LitElement) {
 			<style>
 				:host {
 					position: ${this._positionType};
-					${this._positionType === "absolute" ? `
-						top: ${this.note.y * this.scale}px;
-						left: ${this.note.x * this.scale}px;`
-						: ""
+					${this._positionType === "absolute" ?
+						`
+							top: ${this.note.y * this.scale}px;
+							left: ${this.note.x * this.scale}px;
+						` : ""
 					}
 				}
 			</style>
