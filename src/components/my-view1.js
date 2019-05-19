@@ -13,7 +13,7 @@ import { PageViewElement } from './page-view-element.js';
 
 // These are the shared styles needed by this element.
 import { SharedStyles } from './shared-styles.js';
-import "./mind-map.js";
+import "./maps/mind-map.js";
 
 class MyView1 extends PageViewElement {
   static get styles() {

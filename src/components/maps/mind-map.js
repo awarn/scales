@@ -1,18 +1,18 @@
 import { LitElement, html, css } from "lit-element";
 
-import { makeDownload } from "../utils/files.js";
+import { makeDownload } from "../../utils/files.js";
 
 import { connect } from 'pwa-helpers/connect-mixin.js';
-import { store } from '../store.js';
+import { store } from '../../store.js';
 
-import { getNotes, updateNotePositionType } from "../actions/map.js";
+import { getNotes, updateNotePositionType } from "../../actions/map.js";
 
-import maps, { noteListSelector, noteSettingsSelector } from "../reducers/map.js";
+import maps, { noteListSelector, noteSettingsSelector } from "../../reducers/map.js";
 store.addReducers({
 	maps
 });
 
-import "./map-note.js";
+import "../notes/map-note/map-note.js";
 
 class MindMap extends connect(store)(LitElement) {
 	static get properties() {
