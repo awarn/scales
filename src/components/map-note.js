@@ -32,6 +32,7 @@ class MapNote extends connect(store)(LitElement) {
 					padding: .25rem;
 				}
 				:host > div {
+					flex: 1 0 auto;
 					padding: .25rem .5rem;
 					white-space: nowrap;
 					background: #fff;
