@@ -87,11 +87,28 @@ class MindMap extends connect(store)(LitElement) {
 	}
 
 	increaseScale() {
-		this.scale *= 2;
+		this.lerpScale(2);
 	}
 
 	descreaseScale() {
-		this.scale /= 2;
+		this.lerpScale(.5);
+	}
+
+	lerpScale(modifier = 1, animLength = 500) {
+		let startScale = this.scale;
+		let newScale = this.scale * modifier;
+
+		let startTime = (new Date()).getTime();
+
+		let interval = setInterval(() => {
+			let totalTime = (new Date()).getTime() - startTime;
+
+			this.scale = startScale + (totalTime / animLength) * (newScale - startScale)
+
+			if (totalTime >= animLength) {
+				clearInterval(interval);
+			}
+		}, 10);
 	}
 
 	switchPositionType() {
