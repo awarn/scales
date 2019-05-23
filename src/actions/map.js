@@ -2,7 +2,6 @@ export const SET_NOTE = "SET_NOTE";
 export const GET_NOTES = "GET_NOTES";
 export const ADD_NOTE = "ADD_NOTE";
 export const SET_NOTE_POSITION = "SET_NOTE_POSITION";
-export const PUT_NOTE_IN = "PUT_NOTE_IN";
 export const FILTER_NOTES = "FILTER_NOTES";
 export const UPDATE_NOTE_POSITION_TYPE = "UPDATE_NOTE_POSITION_TYPE";
 
@@ -102,13 +101,6 @@ export const setNotePosition = (note, x, y, z) => {
 		x,
 		y,
 		z
-	}
-}
-
-export const filterNotes = (ids) => {
-	return {
-		type: FILTER_NOTES,
-		ids
 	}
 }
 
