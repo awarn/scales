@@ -2,7 +2,7 @@ import {
 	GET_NOTES,
 	ADD_NOTE,
 	SET_NOTE_POSITION,
-	PUT_NOTE_IN,
+	MOVE_NOTE,
 	UPDATE_NOTE_POSITION_TYPE,
 	SET_NOTE
 } from '../actions/map.js';
@@ -27,7 +27,7 @@ const map = (state = INITIAL_STATE, action) => {
 		case GET_NOTES:
 		case ADD_NOTE:
 		case SET_NOTE_POSITION:
-		case PUT_NOTE_IN:
+		case MOVE_NOTE:
 			return {
 				...state,
 				notes: notes(state.notes, action)
@@ -54,7 +54,7 @@ const notes = (state, action) => {
 		case GET_NOTES: {
 			return action.notes
 		}
-		case PUT_NOTE_IN: {
+		case MOVE_NOTE: {
 			const parent = action.parent;
 			return {
 				...state,
@@ -96,7 +96,7 @@ const note = (state, action) => {
 				y: action.y,
 				z: action.z
 			}
-		case PUT_NOTE_IN:
+		case MOVE_NOTE:
 			return {
 				...state,
 				notes: state.notes ? state.notes.concat([action.note]) : [action.note]

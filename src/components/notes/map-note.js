@@ -3,7 +3,7 @@ import { LitElement, html, css } from "lit-element";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { setNotePosition, putNoteIn, setNote } from "../../actions/map";
+import { setNotePosition, moveNote, setNote } from "../../actions/map";
 
 import map, { settingsSelector } from "../../reducers/map";
 store.addReducers({
@@ -58,12 +58,12 @@ class MapNote extends connect(store)(LitElement) {
 	handleDrop(event) {
 		event.preventDefault();
 		let noteId = event.dataTransfer.getData("text/plain");
-		store.dispatch(putNoteIn(this.note.id, noteId));
+		store.dispatch(moveNote(this.note.id, noteId));
 	}
 
 	handleDragover(event) {
 		event.preventDefault();
-		event.dataTransfer.dropEffect = "move"
+		event.dataTransfer.dropEffect = "move";
 	}
 
 	handleDragend(event) {

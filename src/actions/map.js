@@ -2,6 +2,7 @@ export const SET_NOTE = "SET_NOTE";
 export const GET_NOTES = "GET_NOTES";
 export const ADD_NOTE = "ADD_NOTE";
 export const SET_NOTE_POSITION = "SET_NOTE_POSITION";
+export const MOVE_NOTE = "MOVE_NOTE";
 export const FILTER_NOTES = "FILTER_NOTES";
 export const UPDATE_NOTE_POSITION_TYPE = "UPDATE_NOTE_POSITION_TYPE";
 
@@ -104,9 +105,9 @@ export const setNotePosition = (note, x, y, z) => {
 	}
 }
 
-export const putNoteIn = (parent, note) => {
+export const moveNote = (parent, note) => {
 	return {
-		type: PUT_NOTE_IN,
+		type: MOVE_NOTE,
 		parent,
 		note
 	}
