@@ -59,8 +59,8 @@ class MindMap extends connect(store)(LitElement) {
 	render() {
 		return html`
 			<div>
-				<div>${this._note.title}</div>
-				<div>${this._note.text}</div>
+				<div>&nbsp;${this._note.title}</div>
+				<div>&nbsp;${this._note.text}</div>
 			</div>
 			<div class="mind-map__area">
 				${this._noteList.map((note) => {
