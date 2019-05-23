@@ -1,6 +1,3 @@
-/* export const CREATE = 'CREATE';
-export const DESTROY = 'DESTROY'; */
-//export const SET_MAP_MODE = "SET_MAP_MODE";
 export const SET_NOTE = "SET_NOTE";
 export const GET_NOTES = "GET_NOTES";
 export const ADD_NOTE = "ADD_NOTE";
@@ -133,22 +130,3 @@ export const updateNotePositionType = (positionType) => {
 		positionType
 	}
 }
-
-/* export const create = () => {
-	return {
-		type: CREATE
-	};
-};
-
-export const destroy = () => {
-	return {
-		type: DESTROY
-	};
-}; */
-
-/* export const setMapMode = (mode) => {
-	return {
-		type: SET_MAP_MODE,
-		mode
-	}
-} */
