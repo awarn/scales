@@ -3,14 +3,12 @@ import {
 	ADD_NOTE,
 	SET_NOTE_POSITION,
 	PUT_NOTE_IN,
-	FILTER_NOTES,
 	UPDATE_NOTE_POSITION_TYPE
 } from '../actions/map.js';
 import { createSelector } from 'reselect';
 
 const INITIAL_STATE = {
 	notes: {},
-	noteFilter: [],
 	settings: {
 		positionType: "absolute"
 	},
@@ -26,11 +24,6 @@ const map = (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				notes: notes(state.notes, action)
-			}
-		case FILTER_NOTES:
-			return {
-				...state,
-				noteFilter: action.ids
 			}
 		case UPDATE_NOTE_POSITION_TYPE:
 			return {
@@ -110,36 +103,22 @@ export default map;
 
 export const notesSelector = state => state.map.notes;
 
-export const noteFilterSelector = state => state.map.noteFilter;
-
 export const settingsSelector = state => state.map.settings;
 
 export const noteListSelector = createSelector(
 	notesSelector,
-	noteFilterSelector,
-  (notes, filterIDs) => {
+  (notes) => {
 		return Object.keys(notes)
-		.filter(id => {
-			if (!filterIDs || !filterIDs.length) {
-				return true;
-			}
-
-			if (filterIDs.find(filterID => filterID === id)) {
-				return true;
-			}
-
-			return false;
-		})
-		.map(id => {
-			const item = notes[id];
-			return {
-				id: item.id,
-				title: item.title,
-				x: item.x,
-				y: item.y,
-				notes: item.notes,
-				text: item.text
-			}
-    });
+			.map(id => {
+				const item = notes[id];
+				return {
+					id: item.id,
+					title: item.title,
+					x: item.x,
+					y: item.y,
+					notes: item.notes,
+					text: item.text
+				}
+			});
   }
 );

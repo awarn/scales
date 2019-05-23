@@ -17,7 +17,7 @@ const NOTE_LIST = [
   {"id": "6", "title": "Ashgard", "x": 11.99, "y": 400}
 ];
 
-export const getNotes = (ids) => (dispatch) => {
+export const getNotes = (ids = []) => (dispatch) => {
   let noteList = JSON.parse(localStorage.getItem("NOTE_LIST"));
 
   if (!noteList || noteList.length === 0) {
@@ -26,16 +26,18 @@ export const getNotes = (ids) => (dispatch) => {
 
   let notes = noteList
     .filter((note) => {
-      if (!ids) {
-        return true;
-      }
-
       return ids.find(id => id === note.id);
-    })
+    });
+
+  if (notes.length === 0) {
+    notes = [noteList.find(note => note.id === "1")];
+  }
+
+  notes = notes
     .reduce((obj, note) => {
       obj[note.id] = note
       return obj
-    }, {})
+    }, {});
 
   dispatch({
     type: GET_NOTES,
