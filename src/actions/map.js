@@ -31,7 +31,7 @@ function _getNotes(ids = []) {
 		notes = [noteList.find(note => note.id === "1")];
 	}
 
-	return notes
+	return notes;
 }
 
 export const getNotes = (ids = []) => (dispatch) => {
@@ -60,13 +60,16 @@ export const setNote = (id) => (dispatch) => {
 
 		dispatch({
 			type: GET_NOTES,
-			notes: childNotes
+			notes: childNotes.reduce((obj, note) => {
+					obj[note.id] = note
+					return obj
+				}, {})
 		}); 
 	}
 	else {
 		dispatch({
 			type: GET_NOTES,
-			notes: []
+			notes: {}
 		}); 
 	}
 }
