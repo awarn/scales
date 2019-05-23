@@ -3,7 +3,7 @@ import { LitElement, html, css } from "lit-element";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { setNotePosition, putNoteIn, getNotes } from "../../actions/map";
+import { setNotePosition, putNoteIn, setNote } from "../../actions/map";
 
 import map, { settingsSelector } from "../../reducers/map";
 store.addReducers({
@@ -77,11 +77,7 @@ class MapNote extends connect(store)(LitElement) {
 	}
 
 	handleClick(event) {
-		let notes = this.note.notes;
-		if (!notes || !notes.length) {
-			return;
-		}
-		store.dispatch(getNotes(notes));
+		store.dispatch(setNote(this.note.id));
 	}
 
 	stateChanged(state) {

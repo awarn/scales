@@ -3,11 +3,13 @@ import {
 	ADD_NOTE,
 	SET_NOTE_POSITION,
 	PUT_NOTE_IN,
-	UPDATE_NOTE_POSITION_TYPE
+	UPDATE_NOTE_POSITION_TYPE,
+	SET_NOTE
 } from '../actions/map.js';
 import { createSelector } from 'reselect';
 
 const INITIAL_STATE = {
+	note: {},
 	notes: {},
 	settings: {
 		positionType: "absolute"
@@ -17,6 +19,11 @@ const INITIAL_STATE = {
 
 const map = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
+		case SET_NOTE:
+			return {
+				...state,
+				note: action.note
+			}
 		case GET_NOTES:
 		case ADD_NOTE:
 		case SET_NOTE_POSITION:
@@ -100,6 +107,8 @@ const note = (state, action) => {
 }
 
 export default map;
+
+export const noteSelector = state => state.map.note;
 
 export const notesSelector = state => state.map.notes;
 

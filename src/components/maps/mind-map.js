@@ -5,9 +5,9 @@ import { makeDownload } from "../../utils/files.js";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { getNotes, updateNotePositionType } from "../../actions/map.js";
+import { updateNotePositionType, setNote, saveNotes } from "../../actions/map.js";
 
-import map, { noteListSelector, settingsSelector } from "../../reducers/map.js";
+import map, { noteListSelector, settingsSelector, noteSelector } from "../../reducers/map.js";
 store.addReducers({
 	map
 });
@@ -17,8 +17,9 @@ import "../notes/map-note.js";
 class MindMap extends connect(store)(LitElement) {
 	static get properties() {
 		return {
-			_noteList: Array,
 			_id: String,
+			_note: Object,
+			_noteList: Array,
 			_positionType: String,
 			title: String,
 			scale: Number
@@ -57,6 +58,10 @@ class MindMap extends connect(store)(LitElement) {
 
 	render() {
 		return html`
+			<div>
+				<div>${this._note.title}</div>
+				<div>${this._note.text}</div>
+			</div>
 			<div class="mind-map__area">
 				${this._noteList.map((note) => {
 					return html`
@@ -78,10 +83,11 @@ class MindMap extends connect(store)(LitElement) {
 	}
 
 	firstUpdated() {
-		store.dispatch(getNotes());
+		store.dispatch(setNote());
 	}
 
 	stateChanged(state) {
+		this._note = noteSelector(state);
 		this._noteList = noteListSelector(state);
 		this._positionType = settingsSelector(state).positionType;
 	}
@@ -121,7 +127,8 @@ class MindMap extends connect(store)(LitElement) {
 	}
 
 	save() {
-		localStorage.setItem("NOTE_LIST", JSON.stringify(this._noteList));
+		saveNotes([this._note]);
+		saveNotes(this._noteList);
 	}
 
 	export() {
