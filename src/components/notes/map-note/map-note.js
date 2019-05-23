@@ -5,9 +5,9 @@ import { store } from '../../../store.js';
 
 import { setNotePosition, putNoteIn, filterNotes } from "../../../actions/map";
 
-import maps, { noteSettingsSelector } from "../../../reducers/map";
+import map, { settingsSelector } from "../../../reducers/map";
 store.addReducers({
-	maps
+	map
 });
 
 import { SharedStyles } from "../../shared-styles.js";
@@ -81,7 +81,7 @@ class MapNote extends connect(store)(LitElement) {
 	}
 
 	stateChanged(state) {
-		this._positionType = noteSettingsSelector(state).positionType;
+		this._positionType = settingsSelector(state).positionType;
 	}
 
 	render() {

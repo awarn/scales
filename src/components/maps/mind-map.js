@@ -7,9 +7,9 @@ import { store } from '../../store.js';
 
 import { getNotes, updateNotePositionType } from "../../actions/map.js";
 
-import maps, { noteListSelector, noteSettingsSelector } from "../../reducers/map.js";
+import map, { noteListSelector, settingsSelector } from "../../reducers/map.js";
 store.addReducers({
-	maps
+	map
 });
 
 import "../notes/map-note/map-note.js";
@@ -83,7 +83,7 @@ class MindMap extends connect(store)(LitElement) {
 
 	stateChanged(state) {
 		this._noteList = noteListSelector(state);
-		this._positionType = noteSettingsSelector(state).positionType;
+		this._positionType = settingsSelector(state).positionType;
 	}
 
 	increaseScale() {
@@ -103,7 +103,7 @@ class MindMap extends connect(store)(LitElement) {
 		let interval = setInterval(() => {
 			let totalTime = (new Date()).getTime() - startTime;
 
-			this.scale = startScale + (totalTime / animLength) * (newScale - startScale)
+			this.scale = startScale + (totalTime / animLength) * (newScale - startScale);
 
 			if (totalTime >= animLength) {
 				clearInterval(interval);

@@ -9,7 +9,6 @@ import {
 import { createSelector } from 'reselect';
 
 const INITIAL_STATE = {
-	maps: {},
 	notes: {},
 	noteFilter: [],
 	settings: {
@@ -18,49 +17,28 @@ const INITIAL_STATE = {
 	error: ''
 };
 
-const maps = (state = INITIAL_STATE, action) => {
+const map = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case GET_NOTES:
-			return {
-				...state,
-				notes: action.notes
-			};
+		case ADD_NOTE:
+		case SET_NOTE_POSITION:
+		case PUT_NOTE_IN:
 		case FILTER_NOTES:
 			return {
 				...state,
-				noteFilter: action.ids
+				notes: notes(state.notes, action)
 			}
 		case UPDATE_NOTE_POSITION_TYPE:
 			return {
 				...state,
 				settings: settings(state.settings, action)
 			}
-		case ADD_NOTE:
-		case SET_NOTE_POSITION:
-		case PUT_NOTE_IN:
-			return {
-				...state,
-				notes: notes(state.notes, action),
-				error: ''
-			};
 		default:
 			return state;
 	}
 }
 
-const settings = (state = INITIAL_STATE, action) => {
-	switch (action.type) {
-		case UPDATE_NOTE_POSITION_TYPE:
-			return {
-				...state,
-				positionType: action.positionType
-			}
-		default:
-			return state;
-	}
-}
-
-const notes = (state = INITIAL_STATE, action) => {
+const notes = (state, action) => {
 	switch (action.type) {
 		case ADD_NOTE: {
 			const noteId = action.noteId;
@@ -69,12 +47,14 @@ const notes = (state = INITIAL_STATE, action) => {
 				[noteId]: note(state[noteId], action)
 			};
 		}
-		case SET_NOTE_POSITION: {
-			const noteId = action.note.id;
+		case FILTER_NOTES: {
 			return {
 				...state,
-				[noteId]: note(state[noteId], action)
-			};
+				noteFilter: action.ids
+			}
+		}
+		case GET_NOTES: {
+			return action.notes
 		}
 		case PUT_NOTE_IN: {
 			const parent = action.parent;
@@ -83,6 +63,25 @@ const notes = (state = INITIAL_STATE, action) => {
 				[parent]: note(state[parent], action)
 			}
 		}
+		case SET_NOTE_POSITION: {
+			const noteId = action.note.id;
+			return {
+				...state,
+				[noteId]: note(state[noteId], action)
+			};
+		}
+		default:
+			return state;
+	}
+}
+
+const settings = (state, action) => {
+	switch (action.type) {
+		case UPDATE_NOTE_POSITION_TYPE:
+			return {
+				...state,
+				positionType: action.positionType
+			}
 		default:
 			return state;
 	}
@@ -109,15 +108,13 @@ const note = (state, action) => {
 	}
 }
 
-export default maps;
+export default map;
 
-export const mapsSelector = state => state.maps.maps;
+export const notesSelector = state => state.map.notes;
 
-export const notesSelector = state => state.maps.notes;
+export const noteFilterSelector = state => state.map.noteFilter;
 
-export const noteFilterSelector = state => state.maps.noteFilter;
-
-export const noteSettingsSelector = state => state.maps.settings;
+export const settingsSelector = state => state.map.settings;
 
 export const noteListSelector = createSelector(
 	notesSelector,
