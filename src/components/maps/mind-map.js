@@ -12,7 +12,7 @@ store.addReducers({
 	map
 });
 
-import "../notes/map-note/map-note.js";
+import "../notes/map-note.js";
 
 class MindMap extends connect(store)(LitElement) {
 	static get properties() {

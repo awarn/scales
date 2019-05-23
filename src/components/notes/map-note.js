@@ -1,16 +1,16 @@
 import { LitElement, html, css } from "lit-element";
 
 import { connect } from 'pwa-helpers/connect-mixin.js';
-import { store } from '../../../store.js';
+import { store } from '../../store.js';
 
-import { setNotePosition, putNoteIn, getNotes } from "../../../actions/map";
+import { setNotePosition, putNoteIn, getNotes } from "../../actions/map";
 
-import map, { settingsSelector } from "../../../reducers/map";
+import map, { settingsSelector } from "../../reducers/map";
 store.addReducers({
 	map
 });
 
-import { SharedStyles } from "../../shared-styles.js";
+import { SharedStyles } from "../shared-styles.js";
 
 class MapNote extends connect(store)(LitElement) {
 	static get properties() {
