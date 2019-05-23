@@ -23,10 +23,14 @@ const map = (state = INITIAL_STATE, action) => {
 		case ADD_NOTE:
 		case SET_NOTE_POSITION:
 		case PUT_NOTE_IN:
-		case FILTER_NOTES:
 			return {
 				...state,
 				notes: notes(state.notes, action)
+			}
+		case FILTER_NOTES:
+			return {
+				...state,
+				noteFilter: action.ids
 			}
 		case UPDATE_NOTE_POSITION_TYPE:
 			return {
@@ -46,12 +50,6 @@ const notes = (state, action) => {
 				...state,
 				[noteId]: note(state[noteId], action)
 			};
-		}
-		case FILTER_NOTES: {
-			return {
-				...state,
-				noteFilter: action.ids
-			}
 		}
 		case GET_NOTES: {
 			return action.notes
