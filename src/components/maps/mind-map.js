@@ -5,13 +5,14 @@ import { makeDownload } from "../../utils/files.js";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { updateNotePositionType, setCurrentNote, saveNotes, setDrawnNotes } from "../../actions/map.js";
+import { updateNotePositionType, setCurrentNote, saveNotes } from "../../actions/map.js";
 
 import map, { drawnNotesListSelector, settingsSelector, currentNoteSelector, saveNoteListSelector } from "../../reducers/map.js";
 store.addReducers({
 	map
 });
 
+import "../notes/current-note.js";
 import "../notes/map-note.js";
 
 class MindMap extends connect(store)(LitElement) {
@@ -59,12 +60,7 @@ class MindMap extends connect(store)(LitElement) {
 
 	render() {
 		return html`
-			<div>
-				${this._currentNote ? html`
-					<div>&nbsp;${this._currentNote.title}</div>
-					<div>&nbsp;${this._currentNote.text}</div>
-				` : ""}
-			</div>
+			<current-note></current-note>
 			<div class="mind-map__area">
 				${this._noteList.map((note) => {
 					return html`
