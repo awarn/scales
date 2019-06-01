@@ -5,9 +5,9 @@ import { makeDownload } from "../../utils/files.js";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { updateNotePositionType, setNote, saveNotes } from "../../actions/map.js";
+import { updateNotePositionType, setCurrentNote, saveNotes, setDrawnNotes } from "../../actions/map.js";
 
-import map, { noteListSelector, settingsSelector, noteSelector } from "../../reducers/map.js";
+import map, { drawnNotesListSelector, settingsSelector, currentNoteSelector, saveNoteListSelector } from "../../reducers/map.js";
 store.addReducers({
 	map
 });
@@ -20,6 +20,7 @@ class MindMap extends connect(store)(LitElement) {
 			_id: String,
 			_note: Object,
 			_noteList: Array,
+			_saveNoteList: Array,
 			_positionType: String,
 			title: String,
 			scale: Number
@@ -59,8 +60,10 @@ class MindMap extends connect(store)(LitElement) {
 	render() {
 		return html`
 			<div>
-				<div>&nbsp;${this._note.title}</div>
-				<div>&nbsp;${this._note.text}</div>
+				${this._currentNote ? html`
+					<div>&nbsp;${this._currentNote.title}</div>
+					<div>&nbsp;${this._currentNote.text}</div>
+				` : ""}
 			</div>
 			<div class="mind-map__area">
 				${this._noteList.map((note) => {
@@ -83,12 +86,13 @@ class MindMap extends connect(store)(LitElement) {
 	}
 
 	firstUpdated() {
-		store.dispatch(setNote());
+		store.dispatch(setCurrentNote());
 	}
 
 	stateChanged(state) {
-		this._note = noteSelector(state);
-		this._noteList = noteListSelector(state);
+		this._currentNote = currentNoteSelector(state);
+		this._noteList = drawnNotesListSelector(state);
+		this._saveNoteList = saveNoteListSelector(state);
 		this._positionType = settingsSelector(state).positionType;
 	}
 
@@ -127,8 +131,7 @@ class MindMap extends connect(store)(LitElement) {
 	}
 
 	save() {
-		saveNotes([this._note]);
-		saveNotes(this._noteList);
+		saveNotes(this._saveNoteList);
 	}
 
 	export() {

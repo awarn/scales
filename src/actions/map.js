@@ -1,8 +1,9 @@
-export const SET_NOTE = "SET_NOTE";
+export const SET_CURRENT_NOTE = "SET_CURRENT_NOTE";
+export const SET_DRAWN_NOTES = "SET_DRAWN_NOTES";
 export const GET_NOTES = "GET_NOTES";
-export const ADD_NOTE = "ADD_NOTE";
 export const SET_NOTE_POSITION = "SET_NOTE_POSITION";
 export const MOVE_NOTE = "MOVE_NOTE";
+export const ADD_NOTE = "ADD_NOTE";
 export const FILTER_NOTES = "FILTER_NOTES";
 export const UPDATE_NOTE_POSITION_TYPE = "UPDATE_NOTE_POSITION_TYPE";
 
@@ -35,7 +36,7 @@ function _getNotes(ids = []) {
 }
 
 export const getNotes = (ids = []) => (dispatch) => {
-	let notes = _getNotes(ids)
+	const notes = _getNotes(ids)
 		.reduce((obj, note) => {
 			obj[note.id] = note
 			return obj
@@ -47,31 +48,37 @@ export const getNotes = (ids = []) => (dispatch) => {
 	});
 }
 
-export const setNote = (id) => (dispatch) => {
-	let note = _getNotes([id])[0];
+export const setCurrentNote = (id) => (dispatch) => {
+	const note = _getNotes([id])[0];
 
 	dispatch({
-		type: SET_NOTE,
-		note: note
+		type: SET_CURRENT_NOTE,
+		note
 	});
 
-	if (note.notes) {
-		let childNotes = _getNotes(note.notes);
+	let notes = _getNotes(note.notes)
+		.reduce((obj, note) => {
+			obj[note.id] = note
+			return obj
+		}, {});
 
-		dispatch({
-			type: GET_NOTES,
-			notes: childNotes.reduce((obj, note) => {
-					obj[note.id] = note
-					return obj
-				}, {})
-		}); 
-	}
-	else {
-		dispatch({
-			type: GET_NOTES,
-			notes: {}
-		}); 
-	}
+	dispatch({
+		type: SET_DRAWN_NOTES,
+		notes
+	});
+}
+
+export const setDrawnNotes = (ids = []) => (dispatch) => {
+	let notes = _getNotes(ids)
+		.reduce((obj, note) => {
+			obj[note.id] = note
+			return obj
+		}, {});
+
+	dispatch({
+		type: SET_DRAWN_NOTES,
+		notes
+	});
 }
 
 export const saveNotes = (notes) => {
@@ -105,11 +112,12 @@ export const setNotePosition = (note, x, y, z) => {
 	}
 }
 
-export const moveNote = (parent, note) => {
+export const moveNote = (noteID, newParentID, oldParentID) => {
 	return {
 		type: MOVE_NOTE,
-		parent,
-		note
+		noteID,
+		newParentID,
+		oldParentID
 	}
 }
 

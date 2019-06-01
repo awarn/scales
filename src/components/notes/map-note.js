@@ -3,7 +3,7 @@ import { LitElement, html, css } from "lit-element";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { setNotePosition, moveNote, setNote } from "../../actions/map";
+import { setNotePosition, moveNote, setCurrentNote } from "../../actions/map";
 
 import map, { settingsSelector } from "../../reducers/map";
 store.addReducers({
@@ -22,7 +22,7 @@ class MapNote extends connect(store)(LitElement) {
 			_positionType: String
 		}
 	}
-	
+
 	static get styles() {
 		return [
 			SharedStyles,
@@ -57,8 +57,8 @@ class MapNote extends connect(store)(LitElement) {
 
 	handleDrop(event) {
 		event.preventDefault();
-		let noteId = event.dataTransfer.getData("text/plain");
-		store.dispatch(moveNote(this.note.id, noteId));
+		let note = JSON.parse(event.dataTransfer.getData("application/json"));
+		store.dispatch(moveNote(note.id, this.note.id, note.parent));
 	}
 
 	handleDragover(event) {
@@ -68,16 +68,16 @@ class MapNote extends connect(store)(LitElement) {
 
 	handleDragend(event) {
 		if (this._positionType === "absolute") {
-			this.updatePosition(event.clientX, event.clientY);	
+			this.updatePosition(event.clientX, event.clientY);
 		}
 	}
 
 	handleDragstart(event) {
-		event.dataTransfer.setData("text/plain", this.note.id);
+		event.dataTransfer.setData("application/json", JSON.stringify(this.note));
 	}
 
 	handleClick(event) {
-		store.dispatch(setNote(this.note.id));
+		store.dispatch(setCurrentNote(this.note.id));
 	}
 
 	stateChanged(state) {
