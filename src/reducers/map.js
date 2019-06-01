@@ -5,7 +5,8 @@ import {
 	MOVE_NOTE,
 	UPDATE_NOTE_POSITION_TYPE,
 	SET_CURRENT_NOTE,
-	SET_DRAWN_NOTES
+	SET_DRAWN_NOTES,
+	DRAGSTART_NOTE
 } from '../actions/map.js';
 import { createSelector } from 'reselect';
 
@@ -16,6 +17,7 @@ const INITIAL_STATE = {
 	settings: {
 		positionType: "absolute"
 	},
+	dragNote: undefined,
 	error: ''
 }
 
@@ -52,6 +54,11 @@ const map = (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				settings: settings(state.settings, action)
+			}
+		case DRAGSTART_NOTE:
+			return {
+				...state,
+				dragNote: action.note
 			}
 		default:
 			return state;
@@ -164,6 +171,8 @@ export const settingsSelector = state => state.map.settings;
 export const currentNoteIDSelector = state => state.map.currentNoteID;
 
 export const drawnNotesIDsSelector = state => state.map.drawnNotesIDs;
+
+export const dragNoteSelector = state => state.map.dragNote;
 
 export const currentNoteSelector = createSelector(
 	notesSelector,

@@ -3,9 +3,9 @@ import { LitElement, html, css } from "lit-element";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { setNotePosition, moveNote, setCurrentNote } from "../../actions/map";
+import { setNotePosition, moveNote, setCurrentNote, dragstartNote } from "../../actions/map";
 
-import map, { settingsSelector } from "../../reducers/map";
+import map, { settingsSelector, dragNoteSelector } from "../../reducers/map";
 store.addReducers({
 	map
 });
@@ -19,7 +19,8 @@ class MapNote extends connect(store)(LitElement) {
 			scale: Number,
 			xShift: Number,
 			yShift: Number,
-			_positionType: String
+			_positionType: String,
+			_dragNote: Object
 		}
 	}
 
@@ -52,13 +53,12 @@ class MapNote extends connect(store)(LitElement) {
 	updatePosition(clientX, clientY) {
 		let xPos = (clientX - this.xShift - this.clientWidth / 2) / this.scale;
 		let yPos = (clientY - this.yShift - this.clientHeight / 2) / this.scale;
-		store.dispatch(setNotePosition(this.note, xPos, yPos, 0));
+		store.dispatch(setNotePosition(this._dragNote, xPos, yPos, 0));
 	}
 
 	handleDrop(event) {
 		event.preventDefault();
-		let note = JSON.parse(event.dataTransfer.getData("application/json"));
-		store.dispatch(moveNote(note.id, this.note.id, note.parent));
+		store.dispatch(moveNote(this._dragNote.id, this.note.id, this._dragNote.parent));
 	}
 
 	handleDragover(event) {
@@ -67,11 +67,12 @@ class MapNote extends connect(store)(LitElement) {
 	}
 
 	handleDragend(event) {
+		event.preventDefault();
 		this.updatePosition(event.clientX, event.clientY);
 	}
 
 	handleDragstart(event) {
-		event.dataTransfer.setData("application/json", JSON.stringify(this.note));
+		store.dispatch(dragstartNote(this.note));
 	}
 
 	handleClick(event) {
@@ -80,6 +81,7 @@ class MapNote extends connect(store)(LitElement) {
 
 	stateChanged(state) {
 		this._positionType = settingsSelector(state).positionType;
+		this._dragNote = dragNoteSelector(state);
 	}
 
 	render() {

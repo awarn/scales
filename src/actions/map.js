@@ -6,6 +6,7 @@ export const MOVE_NOTE = "MOVE_NOTE";
 export const ADD_NOTE = "ADD_NOTE";
 export const FILTER_NOTES = "FILTER_NOTES";
 export const UPDATE_NOTE_POSITION_TYPE = "UPDATE_NOTE_POSITION_TYPE";
+export const DRAGSTART_NOTE = "DRAGSTART_NOTE";
 
 const NOTE_LIST = [
 	{"id": "1", "title": "Occam", "x": 10.99, "y": 200, "notes": ["2","3","4","5"], "text": "bla"},
@@ -132,5 +133,12 @@ export const updateNotePositionType = (positionType) => {
 	return {
 		type: UPDATE_NOTE_POSITION_TYPE,
 		positionType
+	}
+}
+
+export const dragstartNote = (note) => {
+	return {
+		type: DRAGSTART_NOTE,
+		note
 	}
 }
