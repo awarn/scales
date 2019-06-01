@@ -68,7 +68,7 @@ class MindMap extends connect(store)(LitElement) {
 							.note="${note}"
 							.scale="${this.scale}"
 							.xShift="${32}"
-							.yShift="${88}"></map-note>`;
+							.yShift="${152}"></map-note>`;
 				})}
 			</div>
 			<div class="mind-map__actions">

@@ -22,8 +22,6 @@ class CurrentNote extends connect(store)(LitElement) {
 			SharedStyles,
 			css`
 				:host {
-					position: absolute;
-					z-index: 1;
 					top: 0;
 					right: 0;
 					height: 4rem;
