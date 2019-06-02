@@ -68,7 +68,9 @@ class MapNote extends connect(store)(LitElement) {
 
 	handleDragend(event) {
 		event.preventDefault();
-		this.updatePosition(event.clientX, event.clientY);
+		if (this._positionType === "absolute") {
+			this.updatePosition(event.clientX, event.clientY);
+		}
 	}
 
 	handleDragstart(event) {
@@ -98,7 +100,7 @@ class MapNote extends connect(store)(LitElement) {
 				}
 			</style>
 			<div
-				draggable="${this._positionType === "absolute" ? "true" : "false"}"
+				draggable="true"
 				@dragend="${this.handleDragend}"
 				@dragstart="${this.handleDragstart}"
 				@drop="${this.handleDrop}"
