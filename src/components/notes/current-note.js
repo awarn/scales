@@ -3,9 +3,9 @@ import { LitElement, html, css } from "lit-element";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { setCurrentNote } from "../../actions/map.js";
+import { setCurrentNote, moveNote, setNotePosition } from "../../actions/map.js";
 
-import map, { currentNoteSelector, currentNoteParentSelector } from "../../reducers/map";
+import map, { currentNoteSelector, currentNoteParentSelector, dragNoteSelector } from "../../reducers/map";
 store.addReducers({
 	map
 });
@@ -16,7 +16,8 @@ class CurrentNote extends connect(store)(LitElement) {
 	static get properties() {
 		return {
 			note: Object,
-			parentNote: Object
+			parentNote: Object,
+			_dragNote: Object
 		}
 	}
 
@@ -58,8 +59,19 @@ class CurrentNote extends connect(store)(LitElement) {
 		store.dispatch(setCurrentNote(this.note.parent));
 	}
 
+	handleDrop(event) {
+		event.preventDefault();
+		store.dispatch(moveNote(this._dragNote.id, this.note.parent, this._dragNote.parent));
+	}
+
+	handleDragover(event) {
+		event.preventDefault();
+		event.dataTransfer.dropEffect = "move";
+	}
+
 	stateChanged(state) {
 		this.note = currentNoteSelector(state);
+		this._dragNote = dragNoteSelector(state);
 		if (this.note) {
 			this.parentNote = currentNoteParentSelector(state);
 		}
@@ -72,8 +84,11 @@ class CurrentNote extends connect(store)(LitElement) {
 				<div>${this.note.text}</div>
 			</div>
 			<div class="actions part">
-				${this.parentNote ?
-					html`<button @click="${this.setParentAsCurrent}">${this.parentNote.title}</button>` : ""
+				${this.parentNote ? html`
+					<button
+						@drop="${this.handleDrop}"
+						@dragover="${this.handleDragover}"
+						@click="${this.setParentAsCurrent}">${this.parentNote.title}</button>` : ""
 				}
 			</div>
 		`;
