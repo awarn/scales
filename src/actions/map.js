@@ -57,16 +57,7 @@ export const setCurrentNote = (id) => (dispatch) => {
 		note
 	});
 
-	let notes = _getNotes(note.notes)
-		.reduce((obj, note) => {
-			obj[note.id] = note
-			return obj
-		}, {});
-
-	dispatch({
-		type: SET_DRAWN_NOTES,
-		notes
-	});
+	dispatch(setDrawnNotes(note.notes));
 }
 
 export const setDrawnNotes = (ids = []) => (dispatch) => {
