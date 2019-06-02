@@ -17,23 +17,23 @@ const NOTE_LIST = [
 	{"id": "6", "title": "Ashgard", "x": 11.99, "y": 400}
 ];
 
-function _getNotes(ids = []) {
+function _getNotes(ids) {
 	let noteList = JSON.parse(localStorage.getItem("NOTE_LIST"));
 
 	if (!noteList || noteList.length === 0) {
 		noteList = NOTE_LIST;
 	}
 
-	let notes = noteList
-		.filter((note) => {
-			return ids.find(id => id === note.id);
-		});
-
-	if (notes.length === 0) {
-		notes = [noteList.find(note => note.id === "1")];
+	if (!ids) {
+		return noteList
+			.filter(note => note.parent === undefined);
 	}
-
-	return notes;
+	else {
+		return noteList
+			.filter(note => {
+				return ids.find(id => id === note.id);
+			});
+	}
 }
 
 export const getNotes = (ids = []) => (dispatch) => {
@@ -50,7 +50,7 @@ export const getNotes = (ids = []) => (dispatch) => {
 }
 
 export const setCurrentNote = (id) => (dispatch) => {
-	const note = _getNotes([id])[0];
+	const note = _getNotes(id ? [id] : null)[0];
 
 	dispatch({
 		type: SET_CURRENT_NOTE,

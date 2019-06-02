@@ -182,6 +182,14 @@ export const currentNoteSelector = createSelector(
 	}
 );
 
+export const currentNoteParentSelector = createSelector(
+	notesSelector,
+	currentNoteSelector,
+	(notes, currentNote) => {
+		return notes[currentNote.parent];
+	}
+);
+
 export const dragNoteSelector = createSelector(
 	notesSelector,
 	dragNoteIDSelector,
