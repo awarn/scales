@@ -53,7 +53,7 @@ class MapNote extends connect(store)(LitElement) {
 	updatePosition(clientX, clientY) {
 		let xPos = (clientX - this.xShift - this.clientWidth / 2) / this.scale;
 		let yPos = (clientY - this.yShift - this.clientHeight / 2) / this.scale;
-		store.dispatch(setNotePosition(this._dragNote, xPos, yPos, 0));
+		store.dispatch(setNotePosition(this._dragNote.id, xPos, yPos, 0));
 	}
 
 	handleDrop(event) {
@@ -74,7 +74,7 @@ class MapNote extends connect(store)(LitElement) {
 	}
 
 	handleDragstart(event) {
-		store.dispatch(dragstartNote(this.note));
+		store.dispatch(dragstartNote(this.note.id));
 	}
 
 	handleClick(event) {

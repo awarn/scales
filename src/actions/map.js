@@ -103,10 +103,10 @@ export const saveNotes = (notes) => {
 	}
 }
 
-export const setNotePosition = (note, x, y, z) => {
+export const setNotePosition = (noteID, x, y, z) => {
 	return {
 		type: SET_NOTE_POSITION,
-		note,
+		noteID,
 		x,
 		y,
 		z
@@ -136,9 +136,9 @@ export const updateNotePositionType = (positionType) => {
 	}
 }
 
-export const dragstartNote = (note) => {
+export const dragstartNote = (noteID) => {
 	return {
 		type: DRAGSTART_NOTE,
-		note
+		noteID
 	}
 }

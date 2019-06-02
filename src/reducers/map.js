@@ -14,10 +14,10 @@ const INITIAL_STATE = {
 	notes: {},
 	currentNoteID: undefined,
 	drawnNotesIDs: [],
+	dragNoteID: undefined,
 	settings: {
 		positionType: "absolute"
 	},
-	dragNote: undefined,
 	error: ''
 }
 
@@ -58,7 +58,7 @@ const map = (state = INITIAL_STATE, action) => {
 		case DRAGSTART_NOTE:
 			return {
 				...state,
-				dragNote: action.note
+				dragNoteID: action.noteID
 			}
 		default:
 			return state;
@@ -69,10 +69,10 @@ const notes = (state, action) => {
 	switch (action.type) {
 		case ADD_NOTE:
 		case SET_CURRENT_NOTE:
-			const noteId = action.note.id;
+			const noteID = action.note.id;
 			return {
 				...state,
-				[noteId]: note(action.note, action)
+				[noteID]: note(action.note, action)
 			}
 		case GET_NOTES:
 		case SET_DRAWN_NOTES:
@@ -89,10 +89,10 @@ const notes = (state, action) => {
 			}
 		}
 		case SET_NOTE_POSITION: {
-			const noteId = action.note.id;
+			const noteID = action.noteID;
 			return {
 				...state,
-				[noteId]: note(state[noteId], action)
+				[noteID]: note(state[noteID], action)
 			};
 		}
 		default:
@@ -172,13 +172,21 @@ export const currentNoteIDSelector = state => state.map.currentNoteID;
 
 export const drawnNotesIDsSelector = state => state.map.drawnNotesIDs;
 
-export const dragNoteSelector = state => state.map.dragNote;
+export const dragNoteIDSelector = state => state.map.dragNoteID;
 
 export const currentNoteSelector = createSelector(
 	notesSelector,
 	currentNoteIDSelector,
 	(notes, currentNoteID) => {
 		return notes[currentNoteID];
+	}
+);
+
+export const dragNoteSelector = createSelector(
+	notesSelector,
+	dragNoteIDSelector,
+	(notes, dragNoteID) => {
+		return notes[dragNoteID];
 	}
 );
 
