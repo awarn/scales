@@ -17,8 +17,6 @@ class MapNote extends connect(store)(LitElement) {
 		return {
 			note: Object,
 			scale: Number,
-			xShift: Number,
-			yShift: Number,
 			_positionType: String,
 			_dragNote: Object
 		}
@@ -50,12 +48,6 @@ class MapNote extends connect(store)(LitElement) {
 		super();
 	}
 
-	updatePosition(clientX, clientY) {
-		let xPos = (clientX - this.xShift - this.clientWidth / 2) / this.scale;
-		let yPos = (clientY - this.yShift - this.clientHeight / 2) / this.scale;
-		store.dispatch(setNotePosition(this._dragNote.id, xPos, yPos, 0));
-	}
-
 	handleDrop(event) {
 		event.preventDefault();
 		store.dispatch(moveNote(this._dragNote.id, this.note.id, this._dragNote.parent));
@@ -64,13 +56,6 @@ class MapNote extends connect(store)(LitElement) {
 	handleDragover(event) {
 		event.preventDefault();
 		event.dataTransfer.dropEffect = "move";
-	}
-
-	handleDragend(event) {
-		event.preventDefault();
-		if (this._positionType === "absolute") {
-			this.updatePosition(event.clientX, event.clientY);
-		}
 	}
 
 	handleDragstart(event) {
@@ -101,7 +86,6 @@ class MapNote extends connect(store)(LitElement) {
 			</style>
 			<div
 				draggable="true"
-				@dragend="${this.handleDragend}"
 				@dragstart="${this.handleDragstart}"
 				@drop="${this.handleDrop}"
 				@dragover="${this.handleDragover}"
