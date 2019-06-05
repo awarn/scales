@@ -50,7 +50,10 @@ class MapNote extends connect(store)(LitElement) {
 
 	handleDrop(event) {
 		event.preventDefault();
-		store.dispatch(moveNote(this._dragNote.id, this.note.id, this._dragNote.parent));
+
+		if (this._dragNote.id !== this.note.id) {
+			store.dispatch(moveNote(this._dragNote.id, this.note.id, this._dragNote.parent));	
+		}
 	}
 
 	handleDragover(event) {
