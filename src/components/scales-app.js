@@ -163,13 +163,6 @@ class Scales extends connect(store)(LitElement) {
 					z-index: 1;
 				}
 
-				footer {
-					padding: 24px;
-					background: var(--app-drawer-background-color);
-					color: var(--app-drawer-text-color);
-					text-align: center;
-				}
-
 				/* Wide layout: when the viewport width is bigger than 460px, layout
 				changes to a wide layout */
 				@media (min-width: 460px) {
@@ -241,10 +234,6 @@ class Scales extends connect(store)(LitElement) {
 				<my-view3 class="page" ?active="${this._page === 'view3'}"></my-view3>
 				<my-view404 class="page" ?active="${this._page === 'view404'}"></my-view404>
 			</main>
-
-			<footer>
-				<p>Made with &hearts; by the Polymer team.</p>
-			</footer>
 
 			<snack-bar ?active="${this._snackbarOpened}">
 				You are now ${this._offline ? 'offline' : 'online'}.
