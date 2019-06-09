@@ -43,6 +43,7 @@
     "polyserve": "^0.27.0",
     "prpl-server": "^1.4.0",
     "puppeteer": "^1.5.0",
-    "wct-mocha": "^1.0.0"
+    "wct-mocha": "^1.0.0",
+    "zingtouch": "1.0.6"
   }
 }
