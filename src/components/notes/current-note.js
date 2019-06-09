@@ -29,15 +29,10 @@ class CurrentNote extends connect(store)(LitElement) {
 					display: flex;
 					top: 0;
 					right: 0;
-					height: 4rem;
 					width: 100%;
-					flex-flow: row;
 					background: #fff;
-				}
-				.part {
-					display: flex;
-					padding: .25rem .5rem;
 					box-shadow: 0 0 .0625rem rgba(0,0,0,1);
+					flex-flow: column;
 				}
 				.actions {
 					flex: 1 0 auto;
@@ -46,6 +41,17 @@ class CurrentNote extends connect(store)(LitElement) {
 					display: flex;
 					flex: 3 0 auto;
 					flex-flow: column;
+				}
+				.header {
+					display: flex;
+					height: 4rem;
+					width: 100%;
+					border-bottom: .0625rem solid rgba(0,0,0,.1);
+					flex-flow: row;
+				}
+				.part {
+					display: flex;
+					padding: .25rem .5rem;
 				}
 			`
 		];
@@ -79,18 +85,22 @@ class CurrentNote extends connect(store)(LitElement) {
 
 	render() {
 		return html`
-			<div class="info part">
-				<div>${this.note.title}</div>
+			<header class="header">
+				<div class="info part">
+					<div>${this.note.title}</div>
+				</div>
+				<div class="actions part">
+					${this.parentNote ? html`
+						<button
+							@drop="${this.handleDrop}"
+							@dragover="${this.handleDragover}"
+							@click="${this.setParentAsCurrent}">${this.parentNote.title}</button>` : ""
+					}
+				</div>
+			</header>
+			<section class="body">
 				<div>${this.note.text}</div>
-			</div>
-			<div class="actions part">
-				${this.parentNote ? html`
-					<button
-						@drop="${this.handleDrop}"
-						@dragover="${this.handleDragover}"
-						@click="${this.setParentAsCurrent}">${this.parentNote.title}</button>` : ""
-				}
-			</div>
+			</section>
 		`;
 	}
 }
