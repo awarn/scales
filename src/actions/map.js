@@ -127,9 +127,11 @@ export const updateNotePositionType = (positionType) => {
 	}
 }
 
-export const dragstartNote = (noteID) => {
+export const dragstartNote = (noteID, offsetX, offsetY) => {
 	return {
 		type: DRAGSTART_NOTE,
-		noteID
+		noteID,
+		offsetX,
+		offsetY
 	}
 }

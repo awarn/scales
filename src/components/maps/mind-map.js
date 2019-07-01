@@ -7,7 +7,7 @@ import { store } from '../../store.js';
 
 import { updateNotePositionType, setCurrentNote, saveNotes, setNotePosition } from "../../actions/map.js";
 
-import map, { drawnNotesListSelector, settingsSelector, currentNoteSelector, saveNoteListSelector, dragNoteSelector } from "../../reducers/map.js";
+import map, { drawnNotesListSelector, settingsSelector, currentNoteSelector, saveNoteListSelector, dragNoteSelector, dragNoteInfoSelector } from "../../reducers/map.js";
 store.addReducers({
 	map
 });
@@ -23,7 +23,7 @@ class MindMap extends connect(store)(LitElement) {
 			_noteList: Array,
 			_saveNoteList: Array,
 			_positionType: String,
-			_dragNote: Object,
+			_dragNoteInfo: Object,
 			title: String,
 			scale: Number
 		}
@@ -88,7 +88,7 @@ class MindMap extends connect(store)(LitElement) {
 		this._noteList = drawnNotesListSelector(state);
 		this._saveNoteList = saveNoteListSelector(state);
 		this._positionType = settingsSelector(state).positionType;
-		this._dragNote = dragNoteSelector(state);
+		this._dragNoteInfo = dragNoteInfoSelector(state);
 	}
 
 	firstUpdated() {
@@ -103,15 +103,15 @@ class MindMap extends connect(store)(LitElement) {
 	handleDrop(event) {
 		event.preventDefault();
 		if (this._positionType === "absolute") {
-			this.updatePosition(event.clientX, event.clientY);
+			this.updateNotePosition(event.clientX, event.clientY);
 		}
 	}
 
-	updatePosition(clientX, clientY) {
+	updateNotePosition(clientX, clientY) {
 		let areaRect = this.shadowRoot.querySelector(".mind-map__area").getBoundingClientRect();
-		let xPos = (clientX - areaRect.left) / this.scale;
-		let yPos = (clientY - areaRect.top) / this.scale;
-		store.dispatch(setNotePosition(this._dragNote.id, xPos, yPos, 0));
+		let xPos = (clientX - areaRect.left - this._dragNoteInfo.offsetX) / this.scale;
+		let yPos = (clientY - areaRect.top - this._dragNoteInfo.offsetY) / this.scale;
+		store.dispatch(setNotePosition(this._dragNoteInfo.id, xPos, yPos, 0));
 	}
 
 	increaseScale() {

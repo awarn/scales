@@ -14,7 +14,7 @@ const INITIAL_STATE = {
 	notes: {},
 	currentNoteID: undefined,
 	drawnNotesIDs: [],
-	dragNoteID: undefined,
+	dragNoteInfo: {},
 	settings: {
 		positionType: "absolute"
 	},
@@ -58,7 +58,11 @@ const map = (state = INITIAL_STATE, action) => {
 		case DRAGSTART_NOTE:
 			return {
 				...state,
-				dragNoteID: action.noteID
+				dragNoteInfo: {
+					id: action.noteID,
+					offsetX: action.offsetX,
+					offsetY: action.offsetY
+				}
 			}
 		default:
 			return state;
@@ -172,7 +176,9 @@ export const currentNoteIDSelector = state => state.map.currentNoteID;
 
 export const drawnNotesIDsSelector = state => state.map.drawnNotesIDs;
 
-export const dragNoteIDSelector = state => state.map.dragNoteID;
+export const dragNoteInfoSelector = state => state.map.dragNoteInfo;
+
+export const dragNoteIDSelector = state => state.map.dragNoteInfo.id;
 
 export const currentNoteSelector = createSelector(
 	notesSelector,

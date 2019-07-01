@@ -90,8 +90,9 @@ class MapNote extends connect(store)(LitElement) {
 		event.dataTransfer.dropEffect = "move";
 	}
 
-	handleDragstart(event) {
-		store.dispatch(dragstartNote(this.note.id));
+	handleDragstart() {
+		let rect = this.getBoundingClientRect();
+		store.dispatch(dragstartNote(this.note.id, rect.width / 2, rect.height / 2));
 	}
 
 	handleClick(event) {
