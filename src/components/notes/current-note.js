@@ -3,7 +3,7 @@ import { LitElement, html, css } from "lit-element";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { setCurrentNote, moveNote, setNotePosition } from "../../actions/map.js";
+import { setCurrentNote, moveNote, setNoteText } from "../../actions/map.js";
 
 import map, { currentNoteSelector, currentNoteParentSelector, dragNoteSelector } from "../../reducers/map";
 store.addReducers({
@@ -12,12 +12,15 @@ store.addReducers({
 
 import { SharedStyles } from "../shared-styles.js";
 
+import "../editors/markdown-editor.js";
+
 class CurrentNote extends connect(store)(LitElement) {
 	static get properties() {
 		return {
 			note: Object,
 			parentNote: Object,
-			_dragNote: Object
+			_dragNote: Object,
+			_editedText: String
 		}
 	}
 
@@ -61,28 +64,6 @@ class CurrentNote extends connect(store)(LitElement) {
 		super();
 	}
 
-	setParentAsCurrent() {
-		store.dispatch(setCurrentNote(this.note.parent));
-	}
-
-	handleDrop(event) {
-		event.preventDefault();
-		store.dispatch(moveNote(this._dragNote.id, this.note.parent, this._dragNote.parent));
-	}
-
-	handleDragover(event) {
-		event.preventDefault();
-		event.dataTransfer.dropEffect = "move";
-	}
-
-	stateChanged(state) {
-		this.note = currentNoteSelector(state);
-		this._dragNote = dragNoteSelector(state);
-		if (this.note) {
-			this.parentNote = currentNoteParentSelector(state);
-		}
-	}
-
 	render() {
 		return html`
 			<header class="header">
@@ -98,10 +79,36 @@ class CurrentNote extends connect(store)(LitElement) {
 					}
 				</div>
 			</header>
-			<section class="body">
-				<div>${this.note.text}</div>
-			</section>
+			<markdown-editor
+				.text=${this.note.text}
+				@text-changed=${this._textChanged}></markdown-editor>
 		`;
+	}
+
+	stateChanged(state) {
+		this.note = currentNoteSelector(state);
+		this._dragNote = dragNoteSelector(state);
+		if (this.note) {
+			this.parentNote = currentNoteParentSelector(state);
+		}
+	}
+
+	_textChanged(e) {
+		store.dispatch(setNoteText(this.note.id, e.detail.text));
+	}
+
+	setParentAsCurrent() {
+		store.dispatch(setCurrentNote(this.note.parent));
+	}
+
+	handleDrop(event) {
+		event.preventDefault();
+		store.dispatch(moveNote(this._dragNote.id, this.note.parent, this._dragNote.parent));
+	}
+
+	handleDragover(event) {
+		event.preventDefault();
+		event.dataTransfer.dropEffect = "move";
 	}
 }
 

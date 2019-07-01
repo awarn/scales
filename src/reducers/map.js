@@ -6,7 +6,8 @@ import {
 	UPDATE_NOTE_POSITION_TYPE,
 	SET_CURRENT_NOTE,
 	SET_DRAWN_NOTES,
-	DRAGSTART_NOTE
+	DRAGSTART_NOTE,
+	SET_NOTE_TEXT
 } from '../actions/map.js';
 import { createSelector } from 'reselect';
 
@@ -46,6 +47,7 @@ const map = (state = INITIAL_STATE, action) => {
 		case GET_NOTES:
 		case ADD_NOTE:
 		case SET_NOTE_POSITION:
+		case SET_NOTE_TEXT:
 			return {
 				...state,
 				notes: notes(state.notes, action)
@@ -92,7 +94,8 @@ const notes = (state, action) => {
 				[oldParentID]: note(state[oldParentID], action)
 			}
 		}
-		case SET_NOTE_POSITION: {
+		case SET_NOTE_POSITION:
+		case SET_NOTE_TEXT: {
 			const noteID = action.noteID;
 			return {
 				...state,
@@ -137,6 +140,12 @@ const note = (state, action) => {
 					}
 			}
 			return newState;
+		case SET_NOTE_TEXT:
+			let text = action.text;
+			return {
+				...state,
+				text
+			}
 		default:
 			return state;
 	}
