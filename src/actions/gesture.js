@@ -1,27 +1,37 @@
-export const REGISTER_REGION = 'REGISTER_REGION';
-export const BIND_GESTURE_LISTENER = 'BIND_GESTURE_LISTENER';
-export const UNBIND_GESTURE_LISTENER = 'UNBIND_GESTURE_LISTENER';
+export const INIT_GESTURES = "INIT_GESTURES";
+export const BIND_GESTURE_LISTENER = "BIND_GESTURE_LISTENER";
+export const BIND_PAN_LISTENER = "BIND_PAN_LISTENER";
+export const UNBIND_GESTURE_LISTENER = "UNBIND_GESTURE_LISTENER";
 
-export const registerRegion = (element) => {
+export const initGestures = (element, elementKey) => {
   return {
-		type: REGISTER_REGION,
-		element
+		type: INIT_GESTURES,
+		element,
+		elementKey
   };
 };
 
-export const bindGestureListener = (element, gesture, handler) => {
+export const bindGestureListener = (elementKey, gesture, handler) => {
   return {
 		type: BIND_GESTURE_LISTENER,
-		element,
+		elementKey,
 		gesture,
 		handler
   };
 };
 
-export const unbindGestureListener = (element, gesture) => {
+export const bindPanListener = (elementKey, handler) => {
+  return {
+		type: BIND_PAN_LISTENER,
+		elementKey,
+		handler
+  };
+};
+
+export const unbindGestureListener = (elementKey, gesture) => {
   return {
 		type: UNBIND_GESTURE_LISTENER,
-		element,
+		elementKey,
 		gesture
   };
 };

@@ -1,65 +1,66 @@
-import ZingTouch from "zingtouch";
+import { initHammer, addGestureListener, removeGestureListener, addPanListener } from "../utils/gesture";
 
 import {
-	REGISTER_REGION,
+	INIT_GESTURES,
 	BIND_GESTURE_LISTENER,
+	BIND_PAN_LISTENER,
 	UNBIND_GESTURE_LISTENER
 } from '../actions/gesture.js';
 
 const INITIAL_STATE = {
-	regions: {},
+	listeners: {},
 	error: ''
 }
 
 const gesture = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case REGISTER_REGION:
+		case INIT_GESTURES:
 		case BIND_GESTURE_LISTENER:
+		case BIND_PAN_LISTENER:
 		case UNBIND_GESTURE_LISTENER:
 			return {
 				...state,
-				regions: regions(state.regions, action)
+				listeners: listeners(state.listeners, action)
 			}
 		default:
 			return state;
 	}
 }
 
-const regions = (state, action) => {
+const listeners = (state, action) => {
 	switch (action.type) {
-		case REGISTER_REGION:
+		case INIT_GESTURES:
 		case BIND_GESTURE_LISTENER:
+		case BIND_PAN_LISTENER:
 		case UNBIND_GESTURE_LISTENER:
-			const regionID = action.regionID;
+			const elementKey = action.elementKey;
 			return {
 				...state,
-				[regionID]: region(state[regionID], action)
+				[elementKey]: listener(state[elementKey], action)
 			}
 		default:
 			return state;
 	}
 }
 
-const region = (state, action) => {
+const listener = (state, action) => {
 	switch (action.type) {
-		case REGISTER_REGION: {
+		case INIT_GESTURES: {
 			const element = action.element;
-			return ZingTouch.Region(element);
+			return initHammer(element);
 		}
 		case BIND_GESTURE_LISTENER: {
-			const element = action.element;
 			const gesture = action.gesture;
 			const handler = action.handler;
-			let newState = {...state};
-			newState.bind(element, gesture, handler);
-			console.log(newState)
-			return newState;
+			return addGestureListener(state, gesture, handler);
+		}
+		case BIND_PAN_LISTENER: {
+			const handler = action.handler;
+			return addPanListener(state, handler);
 		}
 		case UNBIND_GESTURE_LISTENER:
 			const gesture = action.gesture;
-			let newState = {...state};
-			newState.unbind(element, gesture);
-			return newState;
+			return removeGestureListener(state, gesture);
 		default:
 			return state;
 	}

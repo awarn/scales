@@ -6,7 +6,6 @@ import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
 import { updateNotePositionType, setCurrentNote, saveNotes, setNotePosition } from "../../actions/map.js";
-import { registerRegion } from "../../actions/gesture.js";
 
 import map, { drawnNotesListSelector, settingsSelector, currentNoteSelector, saveNoteListSelector, dragNoteSelector } from "../../reducers/map.js";
 import gesture from "../../reducers/gesture.js";
@@ -67,8 +66,6 @@ class MindMap extends connect(store)(LitElement) {
 		return html`
 			<current-note></current-note>
 			<div
-				@dragover="${this.handleDragover}"
-				@drop="${this.handleDrop}"
 				class="mind-map__area">
 				${this._noteList.map((note) => {
 					return html`
@@ -97,24 +94,6 @@ class MindMap extends connect(store)(LitElement) {
 		this._saveNoteList = saveNoteListSelector(state);
 		this._positionType = settingsSelector(state).positionType;
 		this._dragNote = dragNoteSelector(state);
-	}
-
-	handleDragover(event) {
-		event.preventDefault();
-		event.dataTransfer.dropEffect = "move";
-	}
-
-	handleDrop(event) {
-		event.preventDefault();
-		if (this._positionType === "absolute") {
-			this.updatePosition(event.clientX, event.clientY);
-		}
-	}
-
-	updatePosition(clientX, clientY) {
-		let xPos = (clientX - 32) / this.scale;
-		let yPos = (clientY - 152) / this.scale;
-		store.dispatch(setNotePosition(this._dragNote.id, xPos, yPos, 0));
 	}
 
 	increaseScale() {
