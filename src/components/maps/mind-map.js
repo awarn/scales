@@ -6,14 +6,10 @@ import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
 import { updateNotePositionType, setCurrentNote, saveNotes, setNotePosition } from "../../actions/map.js";
-import { registerRegion } from "../../actions/gesture.js";
 
 import map, { drawnNotesListSelector, settingsSelector, currentNoteSelector, saveNoteListSelector, dragNoteSelector } from "../../reducers/map.js";
-import gesture from "../../reducers/gesture.js";
-
 store.addReducers({
-	map,
-	gesture
+	map
 });
 
 import "../notes/current-note.js";
