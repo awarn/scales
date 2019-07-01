@@ -108,8 +108,9 @@ class MindMap extends connect(store)(LitElement) {
 	}
 
 	updatePosition(clientX, clientY) {
-		let xPos = (clientX - 32) / this.scale;
-		let yPos = (clientY - 152) / this.scale;
+		let areaRect = this.shadowRoot.querySelector(".mind-map__area").getBoundingClientRect();
+		let xPos = (clientX - areaRect.left) / this.scale;
+		let yPos = (clientY - areaRect.top) / this.scale;
 		store.dispatch(setNotePosition(this._dragNote.id, xPos, yPos, 0));
 	}
 
