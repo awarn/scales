@@ -3,7 +3,7 @@ import { LitElement, html, css } from "lit-element";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { setNotePosition, moveNote, setCurrentNote, dragstartNote } from "../../actions/map";
+import { moveNote, setCurrentNote, dragstartNote } from "../../actions/map";
 
 import map, { settingsSelector, dragNoteSelector } from "../../reducers/map";
 store.addReducers({
@@ -48,32 +48,6 @@ class MapNote extends connect(store)(LitElement) {
 		super();
 	}
 
-	handleDrop(event) {
-		event.preventDefault();
-
-		if (this._dragNote.id !== this.note.id) {
-			store.dispatch(moveNote(this._dragNote.id, this.note.id, this._dragNote.parent));	
-		}
-	}
-
-	handleDragover(event) {
-		event.preventDefault();
-		event.dataTransfer.dropEffect = "move";
-	}
-
-	handleDragstart(event) {
-		store.dispatch(dragstartNote(this.note.id));
-	}
-
-	handleClick(event) {
-		store.dispatch(setCurrentNote(this.note.id));
-	}
-
-	stateChanged(state) {
-		this._positionType = settingsSelector(state).positionType;
-		this._dragNote = dragNoteSelector(state);
-	}
-
 	render() {
 		return html`
 			<style>
@@ -96,6 +70,32 @@ class MapNote extends connect(store)(LitElement) {
 				<p>${this.note.title}</p>
 			</div>
 		`;
+	}
+
+	stateChanged(state) {
+		this._positionType = settingsSelector(state).positionType;
+		this._dragNote = dragNoteSelector(state);
+	}
+
+	handleDrop(event) {
+		event.preventDefault();
+
+		if (this._dragNote.id !== this.note.id) {
+			store.dispatch(moveNote(this._dragNote.id, this.note.id, this._dragNote.parent));
+		}
+	}
+
+	handleDragover(event) {
+		event.preventDefault();
+		event.dataTransfer.dropEffect = "move";
+	}
+
+	handleDragstart(event) {
+		store.dispatch(dragstartNote(this.note.id));
+	}
+
+	handleClick(event) {
+		store.dispatch(setCurrentNote(this.note.id));
 	}
 }
 

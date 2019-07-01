@@ -83,16 +83,16 @@ class MindMap extends connect(store)(LitElement) {
 		`;
 	}
 
-	firstUpdated() {
-		store.dispatch(setCurrentNote());
-	}
-
 	stateChanged(state) {
 		this._currentNote = currentNoteSelector(state);
 		this._noteList = drawnNotesListSelector(state);
 		this._saveNoteList = saveNoteListSelector(state);
 		this._positionType = settingsSelector(state).positionType;
 		this._dragNote = dragNoteSelector(state);
+	}
+
+	firstUpdated() {
+		store.dispatch(setCurrentNote());
 	}
 
 	handleDragover(event) {
