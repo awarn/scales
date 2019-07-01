@@ -30,7 +30,7 @@ class MapNote extends connect(store)(LitElement) {
 					display: flex;
 					padding: .25rem;
 				}
-				:host > div {
+				.body {
 					flex: 1 0 auto;
 					padding: .25rem .5rem;
 					white-space: nowrap;
@@ -66,7 +66,8 @@ class MapNote extends connect(store)(LitElement) {
 				@dragstart="${this.handleDragstart}"
 				@drop="${this.handleDrop}"
 				@dragover="${this.handleDragover}"
-				@click="${this.handleClick}">
+				@click="${this.handleClick}"
+				class="body">
 				<p>${this.note.title}</p>
 			</div>
 		`;
@@ -95,7 +96,7 @@ class MapNote extends connect(store)(LitElement) {
 		store.dispatch(dragstartNote(this.note.id, rect.width / 2, rect.height / 2));
 	}
 
-	handleClick(event) {
+	handleClick() {
 		store.dispatch(setCurrentNote(this.note.id));
 	}
 }
