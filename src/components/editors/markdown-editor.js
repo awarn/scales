@@ -1,13 +1,22 @@
 import { LitElement, html, css } from "lit-element";
 
+import { connect } from 'pwa-helpers/connect-mixin.js';
+import { store } from '../../store.js';
+
+import editor, { isCollapsedSelector } from "../../reducers/editor.js";
+store.addReducers({
+	editor
+});
+
 import { SharedStyles } from "../shared-styles.js";
 import { SimpleMDEStyles } from "./simplemde-styles.js";
 
-class MarkdownEditor extends (LitElement) {
+class MarkdownEditor extends connect(store)(LitElement) {
 	static get properties() {
 		return {
 			text: String,
-			simplemde: Object
+			simplemde: Object,
+			isCollapsed: Boolean
 		}
 	}
 
@@ -18,6 +27,8 @@ class MarkdownEditor extends (LitElement) {
 			css`
 				:host {
 					display: block;
+					overflow-y: hidden;
+					transition: max-height .25s;
 				}
 			`
 		];
@@ -29,7 +40,20 @@ class MarkdownEditor extends (LitElement) {
 
 	render() {
 		return html`
-			<textarea class="text"></textarea>
+			<style>
+				:host {
+					${this.isCollapsed ?
+						`
+							max-height: 0;
+						` :
+						`
+							max-height: 1000rem;
+						`
+					}
+				}
+			</style>
+			<textarea
+				class="text"></textarea>
 		`;
 	}
 
@@ -39,6 +63,10 @@ class MarkdownEditor extends (LitElement) {
 		this.simplemde.codemirror.on("change", function() {
 			this._onChange(this.simplemde.value());
 		}.bind(this));
+	}
+
+	stateChanged(state) {
+		this.isCollapsed = isCollapsedSelector(state);
 	}
 
 	updated() {

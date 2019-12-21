@@ -3,11 +3,13 @@ import { LitElement, html, css } from "lit-element";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
+import { toggleEditorCollapse } from "../../actions/editor.js";
 import { setCurrentNote, moveNote, setNoteText } from "../../actions/map.js";
 
+import editor, { isCollapsedSelector } from "../../reducers/editor.js";
 import map, { currentNoteSelector, currentNoteParentSelector, dragNoteSelector } from "../../reducers/map";
 store.addReducers({
-	map
+	map, editor
 });
 
 import { SharedStyles } from "../shared-styles.js";
@@ -20,7 +22,8 @@ class CurrentNote extends connect(store)(LitElement) {
 			note: Object,
 			parentNote: Object,
 			_dragNote: Object,
-			_editedText: String
+			_editedText: String,
+			isEditorCollapsed: Boolean
 		}
 	}
 
@@ -39,6 +42,7 @@ class CurrentNote extends connect(store)(LitElement) {
 				}
 				.actions {
 					flex: 1 0 auto;
+					justify-content: flex-end;
 				}
 				.info {
 					display: flex;
@@ -77,6 +81,8 @@ class CurrentNote extends connect(store)(LitElement) {
 							@dragover="${this.handleDragover}"
 							@click="${this.setParentAsCurrent}">${this.parentNote.title}</button>` : ""
 					}
+					<button
+						@click="${this.toggleEditor}">${this.isEditorCollapsed ? "more" : "less"}</button>
 				</div>
 			</header>
 			<markdown-editor
@@ -91,6 +97,7 @@ class CurrentNote extends connect(store)(LitElement) {
 		if (this.note) {
 			this.parentNote = currentNoteParentSelector(state);
 		}
+		this.isEditorCollapsed = isCollapsedSelector(state);
 	}
 
 	_textChanged(e) {
@@ -99,6 +106,10 @@ class CurrentNote extends connect(store)(LitElement) {
 
 	setParentAsCurrent() {
 		store.dispatch(setCurrentNote(this.note.parent));
+	}
+
+	toggleEditor() {
+		store.dispatch(toggleEditorCollapse(!this.isEditorCollapsed));
 	}
 
 	handleDrop(event) {
