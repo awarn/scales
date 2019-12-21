@@ -51,6 +51,12 @@ class MarkdownEditor extends connect(store)(LitElement) {
 						`
 					}
 				}
+
+				@media (min-width: 640px) {
+					:host {
+						max-height: 1000rem;
+					}
+				}
 			</style>
 			<textarea
 				class="text"></textarea>

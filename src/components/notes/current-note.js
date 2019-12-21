@@ -44,10 +44,10 @@ class CurrentNote extends connect(store)(LitElement) {
 					flex: 1 0 auto;
 					justify-content: flex-end;
 				}
-				.info {
-					display: flex;
-					flex: 3 0 auto;
-					flex-flow: column;
+				@media (min-width: 640px) {
+					.editor-toggle {
+						display: none;
+					}
 				}
 				.header {
 					display: flex;
@@ -55,6 +55,11 @@ class CurrentNote extends connect(store)(LitElement) {
 					width: 100%;
 					border-bottom: .0625rem solid rgba(0,0,0,.1);
 					flex-flow: row;
+				}
+				.info {
+					display: flex;
+					flex: 3 0 auto;
+					flex-flow: column;
 				}
 				.part {
 					display: flex;
@@ -82,7 +87,8 @@ class CurrentNote extends connect(store)(LitElement) {
 							@click="${this.setParentAsCurrent}">${this.parentNote.title}</button>` : ""
 					}
 					<button
-						@click="${this.toggleEditor}">${this.isEditorCollapsed ? "more" : "less"}</button>
+						@click="${this.toggleEditor}"
+						class="editor-toggle">${this.isEditorCollapsed ? "more" : "less"}</button>
 				</div>
 			</header>
 			<markdown-editor
