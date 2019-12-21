@@ -5,9 +5,9 @@ import { makeDownload } from "../../utils/files.js";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { updateNotePositionType, setCurrentNote, saveNotes, setNotePosition } from "../../actions/map.js";
+import { updateNotePositionType, setCurrentNote, saveNotes, setNotePosition, saveTreeRelations } from "../../actions/map.js";
 
-import map, { drawnNotesListSelector, settingsSelector, currentNoteSelector, saveNoteListSelector, dragNoteSelector, dragNoteInfoSelector } from "../../reducers/map.js";
+import map, { drawnNotesListSelector, settingsSelector, currentNoteSelector, saveNoteListSelector, dragNoteSelector, dragNoteInfoSelector, relationsSaveSelector } from "../../reducers/map.js";
 store.addReducers({
 	map
 });
@@ -22,6 +22,7 @@ class MindMap extends connect(store)(LitElement) {
 			_note: Object,
 			_noteList: Array,
 			_saveNoteList: Array,
+			_saveRelationsList: Array,
 			_positionType: String,
 			_dragNoteInfo: Object,
 			title: String,
@@ -129,6 +130,7 @@ class MindMap extends connect(store)(LitElement) {
 		this._currentNote = currentNoteSelector(state);
 		this._noteList = drawnNotesListSelector(state);
 		this._saveNoteList = saveNoteListSelector(state);
+		this._saveRelationsList = relationsSaveSelector(state);
 		this._positionType = settingsSelector(state).positionType;
 		this._dragNoteInfo = dragNoteInfoSelector(state);
 	}
@@ -192,6 +194,7 @@ class MindMap extends connect(store)(LitElement) {
 
 	save() {
 		saveNotes(this._saveNoteList);
+		saveTreeRelations(this._saveRelationsList);
 	}
 
 	export() {
