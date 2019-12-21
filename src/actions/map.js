@@ -10,13 +10,20 @@ export const DRAGSTART_NOTE = "DRAGSTART_NOTE";
 export const SET_NOTE_TEXT = "SET_NOTE_TEXT";
 
 const NOTE_LIST = [
-	{"id": "1", "title": "Occam", "x": 10.99, "y": 200, "notes": ["2","3","4","5"], "text": "bla"},
-	{"id": "2", "title": "The High Forest", "x": 29.99, "y": 240, "parent": "1"},
-	{"id": "3", "title": "Old Towers", "x": 8.99, "y": 280, "parent": "1"},
-	{"id": "4", "title": "Mistvalley", "x": 24.99, "y": 320, "parent": "1"},
-	{"id": "5", "title": "Red Larch", "x": 11.99, "y": 360, "parent": "1"},
+	{"id": "1", "title": "Occam", "x": 10.99, "y": 200, "text": "bla"},
+	{"id": "2", "title": "The High Forest", "x": 29.99, "y": 240},
+	{"id": "3", "title": "Old Towers", "x": 8.99, "y": 280},
+	{"id": "4", "title": "Mistvalley", "x": 24.99, "y": 320},
+	{"id": "5", "title": "Red Larch", "x": 11.99, "y": 360},
 	{"id": "6", "title": "Ashgard", "x": 11.99, "y": 400}
 ];
+
+const HAS_NOTE_RELATIONS = [
+	{"id": "a", "above": "1", "below": "2"},
+	{"id": "b", "above": "1", "below": "3"},
+	{"id": "c", "above": "1", "below": "4"},
+	{"id": "d", "above": "1", "below": "5"}
+]
 
 function _getNotes(ids) {
 	let noteList = JSON.parse(localStorage.getItem("NOTE_LIST"));
@@ -33,6 +40,24 @@ function _getNotes(ids) {
 		return noteList
 			.filter(note => {
 				return ids.find(id => id === note.id);
+			});
+	}
+}
+
+function _getHasNoteRelations(ids) {
+	let relations = JSON.parse(localStorage.getItem("HAS_NOTE_RELATIONS"));
+
+	if (!relations || relations.length === 0) {
+		relations = HAS_NOTE_RELATIONS;
+	}
+
+	if (!ids) {
+		return relations;
+	}
+	else {
+		return relations
+			.filter(relation => {
+				return ids.find(id => id === relation.above || id === relation.below);
 			});
 	}
 }
@@ -95,6 +120,27 @@ export const saveNotes = (notes) => {
 	}
 }
 
+export const saveHasNoteRelations = (relations) => {
+	let savedRelations = JSON.parse(localStorage.getItem("HAS_NOTE_RELATIONS"));
+
+	if (savedRelations && savedRelations.length) {
+		savedRelations = savedRelations.map(savedRelation => {
+			return relations.reduce((prev, relation) => {
+				if (savedRelation.id === relation.id) {
+					return relation;
+				}
+				return prev;
+			}, savedRelation); 
+		});
+
+		localStorage.setItem("HAS_NOTE_RELATIONS", JSON.stringify(noteList));
+	}
+	else {
+		localStorage.setItem("HAS_NOTE_RELATIONS", JSON.stringify(HAS_NOTE_RELATIONS));
+		saveNotes(relations);
+	}
+}
+
 export const setNotePosition = (noteID, x, y, z) => {
 	return {
 		type: SET_NOTE_POSITION,
@@ -105,12 +151,11 @@ export const setNotePosition = (noteID, x, y, z) => {
 	}
 }
 
-export const moveNote = (noteID, newParentID, oldParentID) => {
+export const moveNote = (noteId, newParentId) => {
 	return {
 		type: MOVE_NOTE,
-		noteID,
-		newParentID,
-		oldParentID
+		noteId,
+		newParentId
 	}
 }
 

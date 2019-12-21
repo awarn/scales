@@ -19,7 +19,8 @@ const INITIAL_STATE = {
 	settings: {
 		positionType: "absolute"
 	},
-	error: ''
+	error: '',
+	hasNoteRelations: {}
 }
 
 const map = (state = INITIAL_STATE, action) => {
@@ -71,29 +72,41 @@ const map = (state = INITIAL_STATE, action) => {
 	}
 }
 
+const hasNoteRelations = (state, action) => {
+	switch (action.type) {
+		case MOVE_NOTE:
+			const noteId = action.noteId;
+			return {
+				...state,
+				[noteId]: 
+			}
+		default:
+			return state;
+	}
+}
+
+const hasNoteRelation = (state, action) => {
+	switch (action.type) {
+		case MOVE_NOTE:
+			
+			break;
+		default:
+			break;
+	}
+}
+
 const notes = (state, action) => {
 	switch (action.type) {
 		case ADD_NOTE:
 		case SET_CURRENT_NOTE:
-			const noteID = action.note.id;
+			const noteId = action.note.id;
 			return {
 				...state,
-				[noteID]: note(action.note, action)
+				[noteId]: note(action.note, action)
 			}
 		case GET_NOTES:
 		case SET_DRAWN_NOTES:
 			return Object.assign({...state}, action.notes);
-		case MOVE_NOTE: {
-			const noteID = action.noteID;
-			const newParentID = action.newParentID;
-			const oldParentID = action.oldParentID;
-			return {
-				...state,
-				[noteID]: note(state[noteID], action),
-				[newParentID]: note(state[newParentID], action),
-				[oldParentID]: note(state[oldParentID], action)
-			}
-		}
 		case SET_NOTE_POSITION:
 		case SET_NOTE_TEXT: {
 			const noteID = action.noteID;
@@ -109,11 +122,6 @@ const notes = (state, action) => {
 
 const note = (state, action) => {
 	switch (action.type) {
-		case ADD_NOTE:
-		case SET_CURRENT_NOTE:
-		case GET_NOTES:
-		case SET_DRAWN_NOTES:
-			return state
 		case SET_NOTE_POSITION:
 			return {
 				...state,
@@ -121,25 +129,6 @@ const note = (state, action) => {
 				y: action.y,
 				z: action.z
 			}
-		case MOVE_NOTE:
-			switch (state.id) {
-				case action.noteID:
-					return {
-						...state,
-						parent: action.newParentID
-					}
-				case action.newParentID:
-					return {
-						...state,
-						notes: state.notes ? state.notes.concat([action.noteID]) : [action.noteID]
-					}
-				case action.oldParentID:
-					return {
-						...state,
-						notes: state.notes ? state.notes.filter(note => note !== action.noteID) : []
-					}
-			}
-			return newState;
 		case SET_NOTE_TEXT:
 			let text = action.text;
 			return {
