@@ -173,10 +173,6 @@ class Scales extends connect(store)(LitElement) {
 						display: none;
 					}
 
-					.main-content {
-						padding-top: 107px;
-					}
-
 					/* The drawer button isn't shown in the wide layout, so we don't
 					need to offset the title */
 					[main-title] {
