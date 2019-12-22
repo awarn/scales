@@ -28,6 +28,7 @@ class MarkdownEditor extends connect(store)(LitElement) {
 			css`
 				:host {
 					display: block;
+					max-width: 32rem;
 					overflow-y: hidden;
 					transition: max-height .25s;
 				}
