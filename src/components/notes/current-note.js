@@ -37,33 +37,38 @@ class CurrentNote extends connect(store)(LitElement) {
 					right: 0;
 					width: 100%;
 					background: #fff;
-					box-shadow: 0 0 .0625rem rgba(0,0,0,1);
 					flex-flow: column;
 				}
+
 				.actions {
 					flex: 1 0 auto;
 					justify-content: flex-end;
 				}
+
 				@media (min-width: 640px) {
 					.editor-toggle {
 						display: none;
 					}
 				}
+
 				.header {
 					display: flex;
 					height: 3rem;
 					width: 100%;
 					flex-flow: row;
 				}
+
 				.info {
 					display: flex;
 					flex: 3 0 auto;
 					flex-flow: column;
 				}
+
 				.part {
 					display: flex;
 					padding: .5rem;
 				}
+
 				.title {
 					font-size: 1.25rem;
 					font-weight: bold;

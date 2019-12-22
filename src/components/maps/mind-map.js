@@ -61,7 +61,8 @@ class MindMap extends connect(store)(LitElement) {
 				.area {
 					position: relative;
 					height: calc(100vh - 8rem);
-					width: 100%;
+					width: calc(100% + .5rem);
+					margin: 0 -.25rem;
 					overflow: scroll;
 				}
 
