@@ -51,9 +51,8 @@ class CurrentNote extends connect(store)(LitElement) {
 				}
 				.header {
 					display: flex;
-					height: 4rem;
+					height: 3rem;
 					width: 100%;
-					border-bottom: .0625rem solid rgba(0,0,0,.1);
 					flex-flow: row;
 				}
 				.info {
@@ -63,7 +62,11 @@ class CurrentNote extends connect(store)(LitElement) {
 				}
 				.part {
 					display: flex;
-					padding: .25rem .5rem;
+					padding: .5rem;
+				}
+				.title {
+					font-size: 1.25rem;
+					font-weight: bold;
 				}
 			`
 		];
@@ -77,7 +80,7 @@ class CurrentNote extends connect(store)(LitElement) {
 		return html`
 			<header class="header">
 				<div class="info part">
-					<div>${this.note.title}</div>
+					<div class="title">${this.note.title}</div>
 				</div>
 				<div class="actions part">
 					${this.parentNote ? html`

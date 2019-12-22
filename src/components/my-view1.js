@@ -16,27 +16,27 @@ import { SharedStyles } from './shared-styles.js';
 import "./maps/mind-map.js";
 
 class MyView1 extends PageViewElement {
-  static get styles() {
-    return [
-      SharedStyles
-    ];
-  }
+	static get styles() {
+		return [
+			SharedStyles
+		];
+	}
 
-  static get styles() {
+	static get styles() {
 		return [
 			css`
 				:host {
-          padding: 2rem 1rem;
+					padding: 1rem;
 				}
 			`
 		];
 	}
 
-  render() {
-    return html`
-      <mind-map></mind-map>
-    `;
-  }
+	render() {
+		return html`
+			<mind-map></mind-map>
+		`;
+	}
 }
 
 window.customElements.define('my-view1', MyView1);

@@ -37,6 +37,7 @@ class MindMap extends connect(store)(LitElement) {
 					position: relative;
 					flex-flow: column;
 				}
+
 				@media (min-width: 460px) {
 					:host {
 						flex-flow: row;
@@ -59,19 +60,32 @@ class MindMap extends connect(store)(LitElement) {
 
 				.area {
 					position: relative;
-					height: calc(100vh - 5rem);
+					height: calc(100vh - 8rem);
 					width: 100%;
 					overflow: scroll;
 				}
 
-				.current {
-					flex: 2 0 auto;
+				@media (min-width: 460px) {
+					.area {
+						height: calc(100vh - 5rem);
+					}
+				}
+
+				@media (min-width: 460px) {
+					.current {
+						flex: 2 0 auto;
+					}
 				}
 
 				.notes {
-					flex: 5 0 auto;
 					flex-flow: column;
 					align-items: flex-end;
+				}
+
+				@media (min-width: 460px) {
+					.notes {
+						flex: 5 0 auto;
+					}
 				}
 			`
 		];
