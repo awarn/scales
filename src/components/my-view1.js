@@ -8,7 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-import { html } from 'lit-element';
+import { html, css } from 'lit-element';
 import { PageViewElement } from './page-view-element.js';
 
 // These are the shared styles needed by this element.
@@ -16,19 +16,27 @@ import { SharedStyles } from './shared-styles.js';
 import "./maps/mind-map.js";
 
 class MyView1 extends PageViewElement {
-  static get styles() {
-    return [
-      SharedStyles
-    ];
-  }
+	static get styles() {
+		return [
+			SharedStyles
+		];
+	}
 
-  render() {
-    return html`
-      <section>
-        <mind-map></mind-map>
-      </section>
-    `;
-  }
+	static get styles() {
+		return [
+			css`
+				:host {
+					padding: 1rem;
+				}
+			`
+		];
+	}
+
+	render() {
+		return html`
+			<mind-map></mind-map>
+		`;
+	}
 }
 
 window.customElements.define('my-view1', MyView1);

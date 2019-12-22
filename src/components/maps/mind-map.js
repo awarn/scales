@@ -36,19 +36,57 @@ class MindMap extends connect(store)(LitElement) {
 					display: flex;
 					position: relative;
 					flex-flow: column;
-					align-items: flex-end;
 				}
-				.mind-map__actions {
+
+				@media (min-width: 460px) {
+					:host {
+						flex-flow: row;
+					}
+				}
+
+				.actions {
+					display: flex;
 					position: sticky;
 					right: 1rem;
 					bottom: 1rem;
-					height: 3rem;
+					height: 2rem;
+					padding: .5rem 0;
+					justify-content: flex-end;
 				}
-				.mind-map__area {
+
+				.actions > * {
+					margin: 0 0 0 .5rem;
+				}
+
+				.area {
 					position: relative;
-					height: calc(100vh - 9.5rem);
-					width: 100%;
+					height: calc(100vh - 8rem);
+					width: calc(100% + .5rem);
+					margin: 0 -.25rem;
 					overflow: scroll;
+				}
+
+				@media (min-width: 460px) {
+					.area {
+						height: calc(100vh - 5rem);
+					}
+				}
+
+				@media (min-width: 460px) {
+					.current {
+						flex: 2 0 auto;
+					}
+				}
+
+				.notes {
+					flex-flow: column;
+					align-items: flex-end;
+				}
+
+				@media (min-width: 460px) {
+					.notes {
+						flex: 5 0 auto;
+					}
 				}
 			`
 		];
@@ -61,24 +99,28 @@ class MindMap extends connect(store)(LitElement) {
 
 	render() {
 		return html`
-			<current-note></current-note>
-			<div
-				@dragover="${this.handleDragover}"
-				@drop="${this.handleDrop}"
-				class="mind-map__area">
-				${this._noteList.map((note) => {
-					return html`
-						<map-note
-							.note="${note}"
-							.scale="${this.scale}"></map-note>`;
-				})}
+			<div class="current">
+				<current-note></current-note>
 			</div>
-			<div class="mind-map__actions">
-				<button @click="${this.increaseScale}">+</button>
-				<button @click="${this.descreaseScale}">-</button>
-				<button @click="${this.export}">Export</button>
-				<button @click="${this.save}">Save</button>
-				<button @click="${this.switchPositionType}">List/Map</button>
+			<div class="notes">
+				<div
+					@dragover="${this.handleDragover}"
+					@drop="${this.handleDrop}"
+					class="area">
+					${this._noteList.map((note) => {
+						return html`
+							<map-note
+								.note="${note}"
+								.scale="${this.scale}"></map-note>`;
+					})}
+				</div>
+				<div class="actions">
+					<button @click="${this.increaseScale}">+</button>
+					<button @click="${this.descreaseScale}">-</button>
+					<button @click="${this.export}">Export</button>
+					<button @click="${this.save}">Save</button>
+					<button @click="${this.switchPositionType}">List/Map</button>
+				</div>
 			</div>
 		`;
 	}
@@ -108,7 +150,7 @@ class MindMap extends connect(store)(LitElement) {
 	}
 
 	updateNotePosition(clientX, clientY) {
-		let areaRect = this.shadowRoot.querySelector(".mind-map__area").getBoundingClientRect();
+		let areaRect = this.shadowRoot.querySelector(".area").getBoundingClientRect();
 		let xPos = (clientX - areaRect.left - this._dragNoteInfo.offsetX) / this.scale;
 		let yPos = (clientY - areaRect.top - this._dragNoteInfo.offsetY) / this.scale;
 		store.dispatch(setNotePosition(this._dragNoteInfo.id, xPos, yPos, 0));
