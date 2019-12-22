@@ -67,7 +67,7 @@ class MarkdownEditor extends connect(store)(LitElement) {
 
 	firstUpdated() {
 		let textarea = this.shadowRoot.querySelector(".text");
-		this.simplemde = new SimpleMDE({ element: textarea, initialValue: this.text });
+		this.simplemde = new SimpleMDE({ element: textarea, initialValue: this.text, spellChecker: false });
 		this.simplemde.codemirror.on("change", function() {
 			this._onChange(this.simplemde.value());
 		}.bind(this));
