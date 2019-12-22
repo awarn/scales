@@ -10,6 +10,7 @@ store.addReducers({
 
 import { SharedStyles } from "../shared-styles.js";
 import { SimpleMDEStyles } from "./simplemde-styles.js";
+import "simplemde/dist/simplemde.min.js";
 
 class MarkdownEditor extends connect(store)(LitElement) {
 	static get properties() {
@@ -40,6 +41,7 @@ class MarkdownEditor extends connect(store)(LitElement) {
 
 	render() {
 		return html`
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 			<style>
 				:host {
 					${this.isCollapsed ?
