@@ -13,14 +13,14 @@ import { createSelector } from 'reselect';
 
 const INITIAL_STATE = {
 	notes: {},
+	treeRelations: {},
 	currentNoteID: undefined,
 	drawnNotesIDs: [],
 	dragNoteInfo: {},
 	settings: {
 		positionType: "absolute"
 	},
-	error: '',
-	treeRelations: {}
+	error: ''
 }
 
 const map = (state = INITIAL_STATE, action) => {
@@ -85,9 +85,18 @@ const treeRelations = (state, action) => {
 			return Object.assign({...state}, action.treeRelations);
 		case MOVE_NOTE:
 			const noteId = action.noteId;
-			const newParentId = action.newParentId;
-			console.log(currentNoteParentRelationSelector(state))
-			return state;
+			const relation = Object.values(state).find(relation => relation.child === noteId);
+			if (relation) {
+				const relationId = relation.id;
+				return {
+					...state,
+					[relationId]: treeRelation(state[relationId], action)
+				}
+			}
+			else {
+				// TODO: Fix for no previous relation.
+				return state;
+			}
 		default:
 			return state;
 	}
@@ -96,7 +105,13 @@ const treeRelations = (state, action) => {
 const treeRelation = (state, action) => {
 	switch (action.type) {
 		case MOVE_NOTE:
-			return state;
+			const noteId = action.noteId;
+			const newParentId = action.newParentId;
+			return {
+				...state,
+				parent: newParentId,
+				child: noteId
+			};
 		default:
 			return state;
 	}
@@ -183,7 +198,7 @@ export const dragNoteInfoSelector = state => state.map.dragNoteInfo;
 
 export const dragNoteIDSelector = state => state.map.dragNoteInfo.id;
 
-const treeRelationsSelector = state => state.map.treeRelations;
+export const treeRelationsSelector = state => state.map.treeRelations;
 
 export const currentNoteSelector = createSelector(
 	notesSelector,
@@ -243,13 +258,12 @@ export const dragNoteSelector = createSelector(
 
 export const saveNoteListSelector = createSelector(
 	notesSelector,
-  (notes) => {
-		return Object.keys(notes)
-			.map(id => {
-				const item = notes[id];
-				return _makeNoteListItem(item);
-			});
-  }
+  (notes) => Object.keys(notes).map(id => notes[id])
+);
+
+export const relationsSaveSelector = createSelector(
+	treeRelationsSelector,
+  (relations) => Object.keys(relations).map(id => relations[id])
 );
 
 export const drawnNotesListSelector = createSelector(

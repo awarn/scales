@@ -142,10 +142,10 @@ export const saveNotes = (notes) => {
 }
 
 export const saveTreeRelations = (relations) => {
-	let savedRelations = JSON.parse(localStorage.getItem("TREE_RELATIONS"));
+	let saveRelations = JSON.parse(localStorage.getItem("TREE_RELATIONS"));
 
-	if (savedRelations && savedRelations.length) {
-		savedRelations = savedRelations.map(savedRelation => {
+	if (saveRelations && saveRelations.length) {
+		saveRelations = saveRelations.map(savedRelation => {
 			return relations.reduce((prev, relation) => {
 				if (savedRelation.id === relation.id) {
 					return relation;
@@ -154,7 +154,7 @@ export const saveTreeRelations = (relations) => {
 			}, savedRelation); 
 		});
 
-		localStorage.setItem("TREE_RELATIONS", JSON.stringify(noteList));
+		localStorage.setItem("TREE_RELATIONS", JSON.stringify(saveRelations));
 	}
 	else {
 		localStorage.setItem("TREE_RELATIONS", JSON.stringify(TREE_RELATIONS));
