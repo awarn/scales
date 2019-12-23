@@ -20,7 +20,7 @@ const INITIAL_STATE = {
 		positionType: "absolute"
 	},
 	error: '',
-	hasNoteRelations: {}
+	treeRelations: {}
 }
 
 const map = (state = INITIAL_STATE, action) => {
@@ -30,7 +30,8 @@ const map = (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				currentNoteID: currentNoteID,
-				notes: notes(state.notes, action)
+				notes: notes(state.notes, action),
+				treeRelations: treeRelations(state.treeRelations, action)
 			}
 		case SET_DRAWN_NOTES:
 			const drawnNotesIDs = Object.keys(action.notes);
@@ -42,10 +43,15 @@ const map = (state = INITIAL_STATE, action) => {
 		case MOVE_NOTE:
 			return {
 				...state,
-				drawnNotesIDs: state.drawnNotesIDs.filter(id => id !== action.noteID),
-				notes: notes(state.notes, action)
+				drawnNotesIDs: state.drawnNotesIDs.filter(id => id !== action.noteId),
+				treeRelations: treeRelations(state.treeRelations, action)
 			}
 		case GET_NOTES:
+			return {
+				...state,
+				notes: notes(state.notes, action),
+				treeRelations: treeRelations(state.treeRelations, action)
+			}
 		case ADD_NOTE:
 		case SET_NOTE_POSITION:
 		case SET_NOTE_TEXT:
@@ -72,26 +78,27 @@ const map = (state = INITIAL_STATE, action) => {
 	}
 }
 
-const hasNoteRelations = (state, action) => {
+const treeRelations = (state, action) => {
 	switch (action.type) {
+		case SET_CURRENT_NOTE:
+		case GET_NOTES:
+			return Object.assign({...state}, action.treeRelations);
 		case MOVE_NOTE:
 			const noteId = action.noteId;
-			return {
-				...state,
-				[noteId]: 
-			}
+			const newParentId = action.newParentId;
+			console.log(currentNoteParentRelationSelector(state))
+			return state;
 		default:
 			return state;
 	}
 }
 
-const hasNoteRelation = (state, action) => {
+const treeRelation = (state, action) => {
 	switch (action.type) {
 		case MOVE_NOTE:
-			
-			break;
+			return state;
 		default:
-			break;
+			return state;
 	}
 }
 
@@ -158,9 +165,7 @@ function _makeNoteListItem(item) {
 		title: item.title,
 		x: item.x,
 		y: item.y,
-		notes: item.notes,
-		text: item.text,
-		parent: item.parent
+		text: item.text
 	}
 }
 
@@ -178,6 +183,8 @@ export const dragNoteInfoSelector = state => state.map.dragNoteInfo;
 
 export const dragNoteIDSelector = state => state.map.dragNoteInfo.id;
 
+const treeRelationsSelector = state => state.map.treeRelations;
+
 export const currentNoteSelector = createSelector(
 	notesSelector,
 	currentNoteIDSelector,
@@ -186,11 +193,43 @@ export const currentNoteSelector = createSelector(
 	}
 );
 
+const currentNoteParentRelationSelector = createSelector(
+	treeRelationsSelector,
+	currentNoteIDSelector,
+	(relations, currentNoteId) => {
+		return Object.values(relations)
+			.find(relation => relation.child === currentNoteId);
+	}
+);
+
 export const currentNoteParentSelector = createSelector(
 	notesSelector,
-	currentNoteSelector,
-	(notes, currentNote) => {
-		return notes[currentNote.parent];
+	currentNoteParentRelationSelector,
+	(notes, relation) => {
+		if (!relation) {
+			return null;
+		}
+		return notes[relation.parent];
+	}
+);
+
+const currentNoteChildrenRelationsSelector = createSelector(
+	treeRelationsSelector,
+	currentNoteIDSelector,
+	(relations, currentNoteId) => {
+		console.log(relations)
+		return Object.values(relations)
+			.filter(relation => relation.parent === currentNoteId);
+	}
+);
+
+export const currentNoteChildrenSelector = createSelector(
+	notesSelector,
+	currentNoteChildrenRelationsSelector,
+	(notes, relations) => {
+		return notes.filter(note => {
+			return !!relations.find(relation => relation.child === note.id);
+		});
 	}
 );
 

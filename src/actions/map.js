@@ -18,11 +18,11 @@ const NOTE_LIST = [
 	{"id": "6", "title": "Ashgard", "x": 11.99, "y": 400}
 ];
 
-const HAS_NOTE_RELATIONS = [
-	{"id": "a", "above": "1", "below": "2"},
-	{"id": "b", "above": "1", "below": "3"},
-	{"id": "c", "above": "1", "below": "4"},
-	{"id": "d", "above": "1", "below": "5"}
+const TREE_RELATIONS = [
+	{"id": "a", "parent": "1", "child": "2"},
+	{"id": "b", "parent": "1", "child": "3"},
+	{"id": "c", "parent": "1", "child": "4"},
+	{"id": "d", "parent": "1", "child": "5"}
 ]
 
 function _getNotes(ids) {
@@ -44,20 +44,20 @@ function _getNotes(ids) {
 	}
 }
 
-function _getHasNoteRelations(ids) {
-	let relations = JSON.parse(localStorage.getItem("HAS_NOTE_RELATIONS"));
+function _getTreeRelations(noteIds) {
+	let relations = JSON.parse(localStorage.getItem("TREE_RELATIONS"));
 
 	if (!relations || relations.length === 0) {
-		relations = HAS_NOTE_RELATIONS;
+		relations = TREE_RELATIONS;
 	}
 
-	if (!ids) {
+	if (!noteIds) {
 		return relations;
 	}
 	else {
 		return relations
 			.filter(relation => {
-				return ids.find(id => id === relation.above || id === relation.below);
+				return noteIds.find(id => id === relation.parent || id === relation.child);
 			});
 	}
 }
@@ -69,21 +69,42 @@ export const getNotes = (ids = []) => (dispatch) => {
 			return obj
 		}, {});
 
+	const treeRelations = _getTreeRelations(ids)
+		.reduce((obj, relation) => {
+			obj[relation.id] = relation
+			return obj
+		}, {});
+
 	dispatch({
 		type: GET_NOTES,
-		notes
+		notes,
+		treeRelations
 	});
 }
 
 export const setCurrentNote = (id) => (dispatch) => {
 	const note = _getNotes(id ? [id] : null)[0];
 
+	const treeRelationsArray = _getTreeRelations([note.id]);
+
+	const treeRelations = treeRelationsArray
+		.reduce((obj, relation) => {
+			obj[relation.id] = relation
+			return obj
+		}, {});
+
+	dispatch(
+		setDrawnNotes(treeRelationsArray
+			.filter(relation => relation.parent === note.id)
+			.map(relation => relation.child)
+		)
+	);
+
 	dispatch({
 		type: SET_CURRENT_NOTE,
-		note
+		note,
+		treeRelations
 	});
-
-	dispatch(setDrawnNotes(note.notes));
 }
 
 export const setDrawnNotes = (ids = []) => (dispatch) => {
@@ -120,8 +141,8 @@ export const saveNotes = (notes) => {
 	}
 }
 
-export const saveHasNoteRelations = (relations) => {
-	let savedRelations = JSON.parse(localStorage.getItem("HAS_NOTE_RELATIONS"));
+export const saveTreeRelations = (relations) => {
+	let savedRelations = JSON.parse(localStorage.getItem("TREE_RELATIONS"));
 
 	if (savedRelations && savedRelations.length) {
 		savedRelations = savedRelations.map(savedRelation => {
@@ -133,10 +154,10 @@ export const saveHasNoteRelations = (relations) => {
 			}, savedRelation); 
 		});
 
-		localStorage.setItem("HAS_NOTE_RELATIONS", JSON.stringify(noteList));
+		localStorage.setItem("TREE_RELATIONS", JSON.stringify(noteList));
 	}
 	else {
-		localStorage.setItem("HAS_NOTE_RELATIONS", JSON.stringify(HAS_NOTE_RELATIONS));
+		localStorage.setItem("TREE_RELATIONS", JSON.stringify(TREE_RELATIONS));
 		saveNotes(relations);
 	}
 }
