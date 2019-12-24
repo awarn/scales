@@ -232,7 +232,6 @@ const currentNoteChildrenRelationsSelector = createSelector(
 	treeRelationsSelector,
 	currentNoteIDSelector,
 	(relations, currentNoteId) => {
-		console.log(relations)
 		return Object.values(relations)
 			.filter(relation => relation.parent === currentNoteId);
 	}
