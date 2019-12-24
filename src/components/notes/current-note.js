@@ -119,7 +119,7 @@ class CurrentNote extends connect(store)(LitElement) {
 	}
 
 	setParentAsCurrent() {
-		store.dispatch(setCurrentNote(this.note.parent));
+		store.dispatch(setCurrentNote(this.parentNote.id));
 	}
 
 	toggleEditor() {
@@ -128,7 +128,7 @@ class CurrentNote extends connect(store)(LitElement) {
 
 	handleDrop(event) {
 		event.preventDefault();
-		store.dispatch(moveNote(this._dragNote.id, this.note.parent, this._dragNote.parent));
+		store.dispatch(moveNote(this._dragNote.id, this.parentNote.id));
 	}
 
 	handleDragover(event) {
