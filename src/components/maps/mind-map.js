@@ -5,7 +5,9 @@ import { makeDownload } from "../../utils/files.js";
 import { connect } from 'pwa-helpers/connect-mixin.js';
 import { store } from '../../store.js';
 
-import { updateNotePositionType, setCurrentNote, saveNotes, setNotePosition, saveTreeRelations } from "../../actions/map.js";
+import { updateNotePositionType, setCurrentNote, setNotePosition, addNote } from "../../actions/map.js";
+
+import { saveNotes, saveTreeRelations } from "../../notes/note-saver.js";
 
 import map, { drawnNotesListSelector, settingsSelector, currentNoteSelector, saveNoteListSelector, dragNoteSelector, dragNoteInfoSelector, relationsSaveSelector } from "../../reducers/map.js";
 store.addReducers({
@@ -120,6 +122,7 @@ class MindMap extends connect(store)(LitElement) {
 					<button @click="${this.descreaseScale}">-</button>
 					<button @click="${this.export}">Export</button>
 					<button @click="${this.save}">Save</button>
+					<button @click="${this.newNote}">New</button>
 					<button @click="${this.switchPositionType}">List/Map</button>
 				</div>
 			</div>
@@ -137,6 +140,12 @@ class MindMap extends connect(store)(LitElement) {
 
 	firstUpdated() {
 		store.dispatch(setCurrentNote());
+	}
+
+	newNote() {
+		let title = window.prompt("Title", "somewhere");
+		store.dispatch(addNote({title}));
+		this.save();
 	}
 
 	handleDragover(event) {

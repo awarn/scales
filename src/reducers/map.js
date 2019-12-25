@@ -10,6 +10,7 @@ import {
 	SET_NOTE_TEXT
 } from '../actions/map.js';
 import { createSelector } from 'reselect';
+import { createNote } from '../notes/note-helpers.js';
 
 const INITIAL_STATE = {
 	notes: {},
@@ -119,7 +120,17 @@ const treeRelation = (state, action) => {
 
 const notes = (state, action) => {
 	switch (action.type) {
-		case ADD_NOTE:
+		case ADD_NOTE: {
+			let note = createNote({
+				title: action.title,
+				text: action.text
+			});
+			const noteId = note.id;
+			return {
+				...state,
+				[noteId]: note
+			};
+		}
 		case SET_CURRENT_NOTE:
 			const noteId = action.note.id;
 			return {
@@ -174,17 +185,8 @@ const settings = (state, action) => {
 	}
 }
 
-function _makeNoteListItem(item) {
-	return {
-		id: item.id,
-		title: item.title,
-		x: item.x,
-		y: item.y,
-		text: item.text
-	}
-}
-
 export default map;
+
 
 export const notesSelector = state => state.map.notes;
 
@@ -273,9 +275,6 @@ export const drawnNotesListSelector = createSelector(
 			.filter(id => {
 				return drawnNotesIDs && drawnNotesIDs.find(note => note === id);
 			})
-			.map(id => {
-				const item = notes[id];
-				return _makeNoteListItem(item);
-			});
+			.map(id => notes[id]);
   }
 );

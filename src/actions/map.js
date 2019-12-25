@@ -120,48 +120,6 @@ export const setDrawnNotes = (ids = []) => (dispatch) => {
 	});
 }
 
-export const saveNotes = (notes) => {
-	let noteList = JSON.parse(localStorage.getItem("NOTE_LIST"));
-
-	if (noteList && noteList.length) {
-		noteList = noteList.map(listNote => {
-			return notes.reduce((prev, note) => {
-				if (listNote.id === note.id) {
-					return note;
-				}
-				return prev;
-			}, listNote); 
-		});
-
-		localStorage.setItem("NOTE_LIST", JSON.stringify(noteList));
-	}
-	else {
-		localStorage.setItem("NOTE_LIST", JSON.stringify(NOTE_LIST));
-		saveNotes(notes);
-	}
-}
-
-export const saveTreeRelations = (relations) => {
-	let saveRelations = JSON.parse(localStorage.getItem("TREE_RELATIONS"));
-
-	if (saveRelations && saveRelations.length) {
-		saveRelations = saveRelations.map(savedRelation => {
-			return relations.reduce((prev, relation) => {
-				if (savedRelation.id === relation.id) {
-					return relation;
-				}
-				return prev;
-			}, savedRelation); 
-		});
-
-		localStorage.setItem("TREE_RELATIONS", JSON.stringify(saveRelations));
-	}
-	else {
-		localStorage.setItem("TREE_RELATIONS", JSON.stringify(TREE_RELATIONS));
-		saveNotes(relations);
-	}
-}
-
 export const setNotePosition = (noteID, x, y, z) => {
 	return {
 		type: SET_NOTE_POSITION,
@@ -180,10 +138,14 @@ export const moveNote = (noteId, newParentId) => {
 	}
 }
 
-export const addNote = (note) => {
+export const addNote = ({
+	title,
+	text
+}) => {
 	return {
 		type: ADD_NOTE,
-		note
+		title,
+		text
 	};
 }
 
