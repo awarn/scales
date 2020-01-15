@@ -259,22 +259,22 @@ export const dragNoteSelector = createSelector(
 
 export const saveNoteListSelector = createSelector(
 	notesSelector,
-  (notes) => Object.keys(notes).map(id => notes[id])
+	(notes) => noteDictionaryToArray(notes)
 );
 
 export const relationsSaveSelector = createSelector(
 	treeRelationsSelector,
-  (relations) => Object.keys(relations).map(id => relations[id])
+	(relations) => Object.keys(relations).map(id => relations[id])
 );
 
 export const drawnNotesListSelector = createSelector(
 	notesSelector,
 	drawnNotesIDsSelector,
-  (notes, drawnNotesIDs) => {
+	(notes, drawnNotesIDs) => {
 		return Object.keys(notes)
 			.filter(id => {
 				return drawnNotesIDs && drawnNotesIDs.find(note => note === id);
 			})
 			.map(id => notes[id]);
-  }
+	}
 );
