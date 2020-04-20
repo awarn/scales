@@ -1,3 +1,5 @@
+import { NOTE_LIST, TREE_RELATIONS } from "./../notes/note-saver";
+
 export const SET_CURRENT_NOTE = "SET_CURRENT_NOTE";
 export const SET_DRAWN_NOTES = "SET_DRAWN_NOTES";
 export const GET_NOTES = "GET_NOTES";
@@ -8,22 +10,6 @@ export const FILTER_NOTES = "FILTER_NOTES";
 export const UPDATE_NOTE_POSITION_TYPE = "UPDATE_NOTE_POSITION_TYPE";
 export const DRAGSTART_NOTE = "DRAGSTART_NOTE";
 export const SET_NOTE_TEXT = "SET_NOTE_TEXT";
-
-const NOTE_LIST = [
-	{"id": "1", "title": "Occam", "x": 10.99, "y": 200, "text": "bla"},
-	{"id": "2", "title": "The High Forest", "x": 29.99, "y": 240},
-	{"id": "3", "title": "Old Towers", "x": 8.99, "y": 280},
-	{"id": "4", "title": "Mistvalley", "x": 24.99, "y": 320},
-	{"id": "5", "title": "Red Larch", "x": 11.99, "y": 360},
-	{"id": "6", "title": "Ashgard", "x": 11.99, "y": 400}
-];
-
-const TREE_RELATIONS = [
-	{"id": "a", "parent": "1", "child": "2"},
-	{"id": "b", "parent": "1", "child": "3"},
-	{"id": "c", "parent": "1", "child": "4"},
-	{"id": "d", "parent": "1", "child": "5"}
-]
 
 function _getNotes(ids) {
 	let noteList = JSON.parse(localStorage.getItem("NOTE_LIST"));
