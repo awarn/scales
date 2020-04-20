@@ -10,7 +10,7 @@ import {
 	SET_NOTE_TEXT
 } from '../actions/map.js';
 import { createSelector } from 'reselect';
-import { createNote } from '../notes/note-helpers.js';
+import { createNote, noteDictionaryToArray } from '../notes/note-helpers.js';
 
 const INITIAL_STATE = {
 	notes: {},
